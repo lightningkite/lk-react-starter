@@ -5,6 +5,8 @@
 - Generating icons and stuff
 - Setting theme color, description, titles
 - NVM
+- Mock API
+- Login screen
 
 ## Available Scripts
 
