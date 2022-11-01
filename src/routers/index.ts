@@ -1,4 +1,4 @@
-import {Authenticated} from "./Authenticated"
-import {Unauthenticated} from "./Unauthenticated"
+import AuthRoutes from "./AuthRoutes"
+import UnauthRoutes from "./UnauthRoutes"
 
-export {Authenticated, Unauthenticated}
+export {AuthRoutes, UnauthRoutes}

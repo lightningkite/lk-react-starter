@@ -1,9 +1,11 @@
 import {ThemeProvider} from "@mui/material"
 import {Api, RequesterSession} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
+import MainLayout from "Layouts/MainLayout"
+import UnauthLayout from "Layouts/UnauthLayout"
 import React, {createContext, FC} from "react"
 import {BrowserRouter} from "react-router-dom"
-import {Authenticated, Unauthenticated} from "routers"
+import {AuthRoutes, UnauthRoutes} from "routers"
 import {theme} from "./theme"
 
 export const AuthContext = createContext({
@@ -34,11 +36,15 @@ const App: FC = () => {
       <ThemeProvider theme={theme}>
         {isLoggedIn ? (
           <AuthContext.Provider value={{session, logout}}>
-            <Authenticated />
+            <MainLayout>
+              <AuthRoutes />
+            </MainLayout>
           </AuthContext.Provider>
         ) : (
           <UnauthContext.Provider value={{api, changeBackendURL, authenticate}}>
-            <Unauthenticated />
+            <UnauthLayout>
+              <UnauthRoutes />
+            </UnauthLayout>
           </UnauthContext.Provider>
         )}
       </ThemeProvider>

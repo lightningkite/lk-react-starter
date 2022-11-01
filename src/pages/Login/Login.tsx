@@ -1,11 +1,7 @@
 import {LoadingButton} from "@mui/lab"
 import {
   Alert,
-  Box,
   Button,
-  Card,
-  CardContent,
-  Container,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -118,149 +114,120 @@ export const Login: FC = () => {
     }
   }, [code])
 
-  return (
-    <Stack
-      alignItems="center"
-      justifyContent="space-evenly"
-      sx={{
-        height: "100vh",
-        backgroundColor: "background.default"
-      }}
-    >
-      <Container maxWidth="xs">
-        <Card>
-          <CardContent sx={{maxHeight: "80vh", overflowY: "scroll"}}>
-            {(() => {
-              if (tempUUID) {
-                return (
-                  <>
-                    <Typography variant="h1">Code Sent!</Typography>
-                    <Typography variant="subtitle1" mt={3} lineHeight={1.2}>
-                      Enter the 7-digit code that has been sent to &quot;
-                      {identifier}&quot;
-                    </Typography>
+  if (!tempUUID) {
+    return (
+      <>
+        <Typography variant="h1" textAlign="center">
+          React App Starter
+        </Typography>
+        <Typography variant="subtitle1" lineHeight={1.2} mt={3}>
+          Enter your email or phone number, and we&apos;ll send you a code to
+          sign in.
+        </Typography>
+        <Stack spacing={2} mt={3}>
+          <RadioGroup
+            row
+            value={identifierType}
+            onChange={(e) =>
+              setIdentifierType(e.target.value as IdentifierType)
+            }
+          >
+            <FormControlLabel value="email" control={<Radio />} label="Email" />
+            <FormControlLabel
+              value="sms"
+              control={<Radio />}
+              label="Text Message"
+            />
+          </RadioGroup>
 
-                    <TextField
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      fullWidth
-                      sx={{my: 2}}
-                    />
-
-                    {!!error && (
-                      <Alert severity="error" sx={{mb: 2}}>
-                        {error}
-                      </Alert>
-                    )}
-
-                    <LoadingButton
-                      loading={submitting}
-                      variant="contained"
-                      disabled={code.length < 7}
-                      fullWidth
-                      ref={submitCodeButton}
-                      onClick={() => {
-                        setSubmitting(true)
-                        setError("")
-                        api.auth
-                          .submitSSO({
-                            value: code,
-                            clientKey: tempUUID
-                          })
-                          .then((token) => {
-                            authenticate(token)
-                          })
-                          .catch(() =>
-                            setError("Failed to sign-in using the code")
-                          )
-                          .finally(() => setSubmitting(false))
-                      }}
-                    >
-                      Submit
-                    </LoadingButton>
-
-                    <Button
-                      onClick={() => window.location.reload()}
-                      fullWidth
-                      sx={{mt: 1}}
-                    >
-                      Try Again
-                    </Button>
-                  </>
-                )
+          <TextField
+            label={(() => {
+              if (identifierType === "email") {
+                return "Email"
               }
-
-              return (
-                <>
-                  <Typography variant="h1" textAlign="center">
-                    React App Starter
-                  </Typography>
-                  <Typography variant="subtitle1" lineHeight={1.2} mt={3}>
-                    Enter your email or phone number, and we&apos;ll send you a
-                    code to sign in.
-                  </Typography>
-                  <Stack spacing={2} mt={3}>
-                    <RadioGroup
-                      row
-                      value={identifierType}
-                      onChange={(e) =>
-                        setIdentifierType(e.target.value as IdentifierType)
-                      }
-                    >
-                      <FormControlLabel
-                        value="email"
-                        control={<Radio />}
-                        label="Email"
-                      />
-                      <FormControlLabel
-                        value="sms"
-                        control={<Radio />}
-                        label="Text Message"
-                      />
-                    </RadioGroup>
-
-                    <TextField
-                      label={(() => {
-                        if (identifierType === "email") {
-                          return "Email"
-                        }
-                        if (identifierType === "sms") {
-                          return "Phone Number"
-                        }
-                      })()}
-                      value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
-                      type={(() => {
-                        if (identifierType === "email") {
-                          return "email"
-                        }
-                        if (identifierType === "sms") {
-                          return "tel"
-                        }
-                      })()}
-                      fullWidth
-                    />
-
-                    {!!error && <Alert severity="error">{error}</Alert>}
-
-                    <LoadingButton
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      loading={submitting}
-                      onClick={sendSSO}
-                    >
-                      Send Code
-                    </LoadingButton>
-
-                    {showDeveloperSettings && <DeveloperOptions />}
-                  </Stack>
-                </>
-              )
+              if (identifierType === "sms") {
+                return "Phone Number"
+              }
             })()}
-          </CardContent>
-        </Card>
-      </Container>
-    </Stack>
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            type={(() => {
+              if (identifierType === "email") {
+                return "email"
+              }
+              if (identifierType === "sms") {
+                return "tel"
+              }
+            })()}
+            fullWidth
+          />
+
+          {!!error && <Alert severity="error">{error}</Alert>}
+
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            fullWidth
+            loading={submitting}
+            onClick={sendSSO}
+          >
+            Send Code
+          </LoadingButton>
+
+          {showDeveloperSettings && <DeveloperOptions />}
+        </Stack>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Typography variant="h1">Code Sent!</Typography>
+      <Typography variant="subtitle1" mt={3} lineHeight={1.2}>
+        Enter the 7-digit code that has been sent to &quot;
+        {identifier}&quot;
+      </Typography>
+
+      <TextField
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        fullWidth
+        sx={{my: 2}}
+      />
+
+      {!!error && (
+        <Alert severity="error" sx={{mb: 2}}>
+          {error}
+        </Alert>
+      )}
+
+      <LoadingButton
+        loading={submitting}
+        variant="contained"
+        disabled={code.length < 7}
+        fullWidth
+        ref={submitCodeButton}
+        onClick={() => {
+          setSubmitting(true)
+          setError("")
+          api.auth
+            .submitSSO({
+              value: code,
+              clientKey: tempUUID
+            })
+            .then((token) => {
+              authenticate(token)
+            })
+            .catch(() => setError("Failed to sign-in using the code"))
+            .finally(() => setSubmitting(false))
+        }}
+      >
+        Submit
+      </LoadingButton>
+
+      <Button onClick={() => window.location.reload()} fullWidth sx={{mt: 1}}>
+        Try Again
+      </Button>
+    </>
   )
 }
