@@ -7,6 +7,7 @@
 - NVM
 - Mock API
 - Login screen
+- Explain folder structure in readme
 
 ## Available Scripts
 
