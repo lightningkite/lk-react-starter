@@ -1,11 +1,14 @@
-import {Container, Typography} from "@mui/material"
+import {Container, ThemeProvider, Typography} from "@mui/material"
 import React from "react"
+import {theme} from "./theme"
 
 function App() {
   return (
-    <Container>
-      <Typography>Hello World</Typography>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Typography>Hello World</Typography>
+      </Container>
+    </ThemeProvider>
   )
 }
 
