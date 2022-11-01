@@ -6,8 +6,9 @@
 - Setting theme color, description, titles
 - NVM
 - Mock API
-- Login screen
+- Login screen developer options
 - Explain folder structure in readme
+- Change localstorage keys prefix
 
 ## Available Scripts
 

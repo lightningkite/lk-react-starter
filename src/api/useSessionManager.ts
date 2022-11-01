@@ -35,10 +35,10 @@ export const useSessionManager = (): {
   api: Api
   changeBackendURL: (backendURL: string) => void
   session: RequesterSession | null | undefined
-  authenticate: (initialAuthToken: string) => void
+  authenticate: (userToken: string) => void
   logout: () => void
 } => {
-  // Undefined if it's waiting, null if it failed
+  // Undefined if it's waiting, null if not logged in, and a session if logged in
   const [session, setSession] = useState<RequesterSession | null | undefined>(
     localStorage.getItem(LocalStorageKey.USER_TOKEN) ? undefined : null
   )
@@ -49,7 +49,8 @@ export const useSessionManager = (): {
     )
     const urlToUse = localStorageBackendURL ?? envBackendHTTP
 
-    if (!urlToUse) return new LiveApi(envBackendHTTP ?? backendURLOptions[0])
+    if (!urlToUse)
+      return new LiveApi(envBackendHTTP ?? backendURLOptions[0].url)
     if (urlToUse === "mock") return new MockApi()
     return new LiveApi(urlToUse)
   })
