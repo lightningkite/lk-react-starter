@@ -2,9 +2,9 @@
 
 ## TODO
 
-* Generating icons and stuff
-* Setting theme color, description, titles
-* NVM
+- Generating icons and stuff
+- Setting theme color, description, titles
+- NVM
 
 ## Available Scripts
 
