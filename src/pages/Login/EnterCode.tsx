@@ -14,6 +14,7 @@ const EnterCode: FC<EnterCodeProps> = (props) => {
   const {api, authenticate} = useContext(UnauthContext)
   const submitCodeButton = createRef<HTMLButtonElement>()
 
+  // The 7-digit code sent to the user
   const [code, setCode] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")

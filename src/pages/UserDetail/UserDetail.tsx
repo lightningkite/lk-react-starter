@@ -10,13 +10,18 @@ import {UserForm} from "./UserForm"
 
 export const UserDetail: FC = () => {
   const {userId} = useParams()
-  const {session} = useContext(AuthContext)
+  const {session, currentUser, refreshCurrentUser} = useContext(AuthContext)
 
   const [user, setUser] = useState<User | null>()
 
   const refreshUser = async () => {
-    const user = await session.user.detail(userId as string)
-    setUser(user)
+    // If the current user is editing their own profile, refresh the current user
+    if (user?._id === currentUser._id) {
+      refreshCurrentUser()
+    }
+
+    const newUser = await session.user.detail(userId as string)
+    setUser(newUser)
   }
 
   useEffect(() => {
