@@ -18,7 +18,7 @@ import {NavLink} from "react-router-dom"
 
 const navItems: Array<{label: string; to: string}> = [
   {label: "Home", to: "/"},
-  {label: "Items", to: "/items"}
+  {label: "Users", to: "/users"}
 ]
 
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {
@@ -41,9 +41,7 @@ const MainLayout: FC<{children: ReactNode}> = ({children}) => {
         >
           <ListItemButton onClick={(e) => setUserMenuAnchor(e.currentTarget)}>
             <ListItemAvatar>
-              <Avatar>
-                <Person />
-              </Avatar>
+              <Avatar src={currentUser.profilePic} />
             </ListItemAvatar>
             <ListItemText
               primary={currentUser.name}

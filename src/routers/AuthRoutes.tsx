@@ -1,6 +1,6 @@
 import {Home} from "pages/Home"
-import {ItemDetail} from "pages/ItemDetail"
-import {ItemIndex} from "pages/ItemIndex"
+import {UserDetail} from "pages/UserDetail"
+import {UserIndex} from "pages/UserIndex"
 import React, {FC} from "react"
 import {Navigate, Route, Routes} from "react-router-dom"
 
@@ -9,8 +9,8 @@ const AuthRoutes: FC = () => {
     <Routes>
       <Route>
         <Route path="/" element={<Home />} />
-        <Route path="/items" element={<ItemIndex />} />
-        <Route path="/items/:itemId" element={<ItemDetail />} />
+        <Route path="/users" element={<UserIndex />} />
+        <Route path="/users/:userId" element={<UserDetail />} />
 
         {/* If page doesn't exist, redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

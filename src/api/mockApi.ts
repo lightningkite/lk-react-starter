@@ -17,7 +17,7 @@ export class MockApi implements Api {
     }
   }
 
-  readonly users = generateFakeMockCrud<User>([], "user")
+  readonly user = generateFakeMockCrud<User>(this.mockDatastore.users, "user")
 
   readonly auth = {
     emailLoginLink: async (email: string): Promise<void> => {

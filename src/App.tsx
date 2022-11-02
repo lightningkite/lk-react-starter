@@ -1,9 +1,10 @@
-import {Alert, ThemeProvider} from "@mui/material"
+import {ThemeProvider} from "@mui/material"
 import {Api, RequesterSession, User} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
+import ErrorAlert from "components/ErrorAlert"
 import Loading from "components/Loading"
-import MainLayout from "Layouts/MainLayout"
-import UnauthLayout from "Layouts/UnauthLayout"
+import MainLayout from "layouts/MainLayout"
+import UnauthLayout from "layouts/UnauthLayout"
 import React, {createContext, FC, useEffect, useState} from "react"
 import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
@@ -57,11 +58,7 @@ const App: FC = () => {
   }
 
   if (currentUser === null) {
-    return (
-      <Alert severity="error" sx={{m: 3}}>
-        Error loading current user
-      </Alert>
-    )
+    return <ErrorAlert>Error loading current user</ErrorAlert>
   }
 
   return (
