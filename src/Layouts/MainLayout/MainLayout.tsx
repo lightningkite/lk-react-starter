@@ -6,7 +6,8 @@ import MyUserMenu from "./MyUserMenu"
 // Define the items that will appear in the sidebar navigation
 const navItems: Array<{label: string; to: string}> = [
   {label: "Home", to: "/"},
-  {label: "Users", to: "/users"}
+  {label: "Users", to: "/users"},
+  {label: "Another Page", to: "/another-page"}
 ]
 
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {
