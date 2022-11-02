@@ -34,25 +34,29 @@ if (
 export const useSessionManager = (): {
   api: Api
   changeBackendURL: (backendURL: string) => void
-  session: RequesterSession | null | undefined
+  session: RequesterSession | null
   authenticate: (userToken: string) => void
   logout: () => void
 } => {
-  // Undefined if it's waiting, null if not logged in, and a session if logged in
-  const [session, setSession] = useState<RequesterSession | null | undefined>(
-    localStorage.getItem(LocalStorageKey.USER_TOKEN) ? undefined : null
-  )
-
   const [api, setApi] = useState<Api>(() => {
     const localStorageBackendURL = localStorage.getItem(
       LocalStorageKey.BACKEND_URL
     )
-    const urlToUse = localStorageBackendURL ?? envBackendHTTP
 
-    if (!urlToUse)
-      return new LiveApi(envBackendHTTP ?? backendURLOptions[0].url)
-    if (urlToUse === "mock") return new MockApi()
-    return new LiveApi(urlToUse)
+    const initialBackendURL = localStorageBackendURL ?? envBackendHTTP ?? "mock"
+
+    if (initialBackendURL === "mock") return new MockApi()
+    return new LiveApi(initialBackendURL)
+  })
+
+  // Null if not logged in, a session if logged in
+  const [session, setSession] = useState<RequesterSession | null>(() => {
+    const token = localStorage.getItem(LocalStorageKey.USER_TOKEN)
+
+    if (token) {
+      return new RequesterSession(api, token)
+    }
+    return null
   })
 
   const authenticate = (userToken: string) => {
