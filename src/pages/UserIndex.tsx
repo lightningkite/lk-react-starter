@@ -24,7 +24,7 @@ export const UserIndex: FC = () => {
 
   useEffect(() => {
     session.user
-      .query({})
+      .query({orderBy: ["name"]})
       .then(setUsers)
       .catch(() => setUsers(null))
   }, [])
