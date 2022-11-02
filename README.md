@@ -7,6 +7,7 @@ The purpose of this project is to be a starting point for new React apps that us
 - Mock API for local development without running the backend
 - MUI UI component library including material icons
 - React Router with several example routes for reference
+- Formik for form state management
 - Eslint, Prettier, and automatic import reordering
 
 ## TODO
@@ -45,7 +46,17 @@ This project is currently configured to accept the options `local`, `dev`, `stag
 
 If you decide to use different options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
 
-### Lightning Server SDK
+### Lightning Server SDK & Mock Data
+
+Generate an SDK your project's lightning server backend, then use it to replace the file `src/api/sdk.ts`.
+
+There are 2 relevant files for using mock data located in the `src/api` directory: `mockDatastore.ts` and `mockApi.ts`.
+
+The MockDatastore interface should contain all models provided by your app's backend through rest endpoints. For each of your apps models, create a function to generate mock data and put it in a file in the `src/api/mocks` directory. Use these function to generate a MockDatastore object in the `generateMockDatastore` function.
+
+In `mockApi.ts`, the `MockApi` class should implement the `Api` interface from your SDK to provide mock data without making any calls to a server. The `mockRestEndpointFunctions` function from lightning-server-simplified will mock all of the standard rest endpoints for you.
+
+To use the mock API, select the Mock server from the login screen.
 
 ### Project Organization
 
