@@ -35,14 +35,16 @@ export const UserDetail: FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <PageHeader title={user.name} />
+      <PageHeader title={user.name}>
+        <Button color="error">Delete</Button>
+      </PageHeader>
 
       <Button
         startIcon={<ArrowLeft />}
         onClick={() => navigate("/users")}
         sx={{mb: 2}}
       >
-        Return to users list
+        All Users
       </Button>
 
       <Card>

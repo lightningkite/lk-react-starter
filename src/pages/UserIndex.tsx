@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Card,
   Container,
   List,
@@ -38,7 +39,9 @@ export const UserIndex: FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <PageHeader title="Users List" />
+      <PageHeader title="Users List">
+        <Button>Add User</Button>
+      </PageHeader>
 
       <Card>
         <List>
