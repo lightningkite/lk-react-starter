@@ -25,21 +25,46 @@ This starter project can be run locally with node 16 by running `npm install` th
 
 This project is compatible with node version 16 (LTS).
 
-NVM is recommended for easily manage installed node versions. Install nvm using this guide: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm). Then, run `nvm install 16` and `nvm use 16`.
+NVM is recommended for easily manage installed node versions. Install nvm using this guide: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm).
+
+```bash
+nvm install 16
+nvm use 16
+```
 
 ## Configure Environment Variables
 
-Create a new `.env` file using the example (`cp .env.example .env`). Errors will be logged to the console if the correct env variables do not exist.
+Create a new `.env` file using the example. Errors will be logged to the console if the correct env variables do not exist.
 
-#### `REACT_APP_BACKEND_HTTP_URL`
+**REACT_APP_BACKEND_HTTP_URL** is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
 
-This is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
+**REACT_APP_DEPLOYMENT_TYPE** can be set to `local`, `dev`, `staging`, or `production`.
 
-#### `REACT_APP_DEPLOYMENT_TYPE`
+If you need to use different deployment type options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
 
-This project is currently configured to accept the options `local`, `dev`, `staging`, or `production`.
+```bash
+cp ".env.example" ".env"
+```
 
-If you decide to use different options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
+```
+// .env
+
+REACT_APP_BACKEND_HTTP_URL=mock
+
+# Set to local, dev, staging, or production
+REACT_APP_DEPLOYMENT_TYPE=local
+```
+
+```typescript
+// src/utils/helpers/envHelpers.ts
+
+export enum DeploymentType {
+  LOCAL = "local",
+  DEV = "dev",
+  STAGING = "staging",
+  PRODUCTION = "production"
+}
+```
 
 ## Lightning Server SDK & Mock Data
 
@@ -50,6 +75,19 @@ There are 2 relevant files for using mock data located in the `src/api` director
 The MockDatastore interface should contain all models provided by your app's backend through rest endpoints. For each of your apps models, create a function to generate mock data and put it in a file in the `src/api/mocks` directory. Use these function to generate a MockDatastore object in the `generateMockDatastore` function.
 
 In `mockApi.ts`, the `MockApi` class should implement the `Api` interface from your SDK to provide mock data without making any calls to a server. The `mockRestEndpointFunctions` function from lightning-server-simplified will mock all of the standard rest endpoints for you.
+
+```typescript
+// src/api/mockApi.ts
+
+export class MockApi implements Api {
+	...
+
+	readonly user = {
+		...mockRestEndpointFunctions<User>(this.mockDatastore.users, "user"),
+		// Add any custom endpoints here
+	}
+}
+```
 
 To use the mock API, select the Mock server from the login screen.
 
