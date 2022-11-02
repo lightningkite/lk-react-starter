@@ -98,7 +98,7 @@ Most projects will benefit from using the following directory organization insid
 
 ### /layouts
 
-Layouts contain page structure that is common across many pages such as a header, footer, and navigation. Most apps will only have 2 layouts, one for authenticated pages and one for unauthenticated pages.
+Layouts contain page structure that is common across many pages such as a header, footer, or navigation bar. Most apps will only have 2 layouts, one for authenticated pages and one for unauthenticated pages.
 
 ### /routers
 
