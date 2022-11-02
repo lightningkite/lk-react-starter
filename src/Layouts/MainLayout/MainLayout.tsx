@@ -16,6 +16,7 @@ import {AuthContext} from "App"
 import React, {FC, ReactNode, useContext, useState} from "react"
 import {NavLink, useNavigate} from "react-router-dom"
 
+// Define the items that will appear in the sidebar navigation
 const navItems: Array<{label: string; to: string}> = [
   {label: "Home", to: "/"},
   {label: "Users", to: "/users"}

@@ -7,7 +7,8 @@ import {useFormik} from "formik"
 import React, {FC, useContext, useEffect, useState} from "react"
 import * as yup from "yup"
 
-const validationSchema = yup.object({
+// Form validation schema. See: https://www.npmjs.com/package/yup#object
+const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup.string().required("Email is required"),
   phone: yup.string().required("Phone is required")
@@ -25,6 +26,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
 
   const [error, setError] = useState("")
 
+  // Formik is a library for managing form state. See: https://formik.org/docs/overview
   const formik = useFormik({
     initialValues: {
       name: user.name,
@@ -32,26 +34,28 @@ export const UserForm: FC<UserFormProps> = (props) => {
       phone: user.phone
     },
     validationSchema,
-    onSubmit: (values, {resetForm}) => {
+    // When the form is submitted, this function is called if the form values are valid
+    onSubmit: async (values, {resetForm}) => {
       setError("")
 
+      // Automatically builds the Lightning Server modification given the old object and the new values
       const modification = makeObjectModification(user, values)
 
+      // Handle the case where nothing changed (this shouldn't happen, but we gotta make TypeScript happy)
       if (!modification) {
-        return Promise.resolve()
+        return
       }
 
-      return session.user
-        .modify(user._id, modification)
-        .then(() => {
-          refreshUser()
-          resetForm({values})
-        })
-        .catch(() => setError("Error updating user"))
+      try {
+        await session.user.modify(user._id, modification)
+        await refreshUser()
+      } catch {
+        setError("Error updating user")
+      }
     }
   })
 
-  // Reset the form if the user changes
+  // Reset the form when the user changes or refreshes
   useEffect(() => formik.resetForm({values: user}), [user])
 
   return (
@@ -80,7 +84,9 @@ export const UserForm: FC<UserFormProps> = (props) => {
         error={formik.touched.phone && !!formik.errors.phone}
         helperText={formik.touched.phone && formik.errors.phone}
       />
+
       {error && <Alert severity="error">{error}</Alert>}
+
       <LoadingButton
         onClick={() => {
           formik.submitForm()
