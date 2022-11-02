@@ -12,12 +12,13 @@ The purpose of this project is to be a starting point for new React apps that us
 
 ## TODO
 
-- Change localstorage keys prefix
 - Birthday with MUIX date pickers
 
 ## Using the Starter Project
 
 This starter project can be run locally with node 16 by running `npm install` then `npm start`. To use it as a starter for a new project, fork this repo, then follow the steps below.
+
+To avoid conflicting localStorage keys with other projects you're developing locally, you can change the prefix of the keys in `src/utils/constants.ts` to something unique to your project.
 
 ## Node
 
@@ -95,23 +96,23 @@ All source code should be placed in the `src` directory. `App.tsx` contains the 
 
 Most projects will benefit from using the following directory organization inside `src`:
 
-#### `layouts`
+### /layouts
 
 Layouts contain page structure that is common across many pages such as a header, footer, and navigation. Most apps will only have 2 layouts, one for authenticated pages and one for unauthenticated pages.
 
-#### `routers`
+### /routers
 
 Router files provide routing to different pages using react router. Usually there will be one router for each layout.
 
-#### `pages`
+### /pages
 
 Each file or directory in pages represents a "page" or "view" in the application. These pages are conditionally rendered by the routers. If all unique code for a page can reasonably be included in one file, then place a .tsx file directly in the `pages` directory. If the page is more complex and has several components (see for example the Login page), create a directory for that page with an `index.ts` file inside.
 
-#### `components`
+### /components
 
 Components in this directory are not specific to any one page, but can be reused across many different pages or layouts.
 
-#### `styles`
+### /styles
 
 We have learned by sad experience that it is the nature and disposition of almost all developers, as soon as they get a little authority, as they suppose, they will immediately begin to write a bunch of convoluted, unmaintainable CSS.
 
@@ -119,11 +120,11 @@ Don't write CSS. Use MUI's styling system instead (see comments in `theme.ts`). 
 
 If you really really need to write CSS (for example to override styles from a third party component), there's a `index.css` file in this directory you can use.
 
-#### `api`
+### /api
 
 See the "Lightning Server SDK & Mock Data" section above. You shouldn't need to add any additional files to this directory besides what is mentioned in that section.
 
-#### `utils`
+### /utils
 
 This is a catch-all directory for utility functions, models, hooks, helpers, or providers.
 
