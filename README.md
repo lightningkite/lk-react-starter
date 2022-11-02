@@ -21,13 +21,13 @@ The purpose of this project is to be a starting point for new React apps that us
 
 This starter project can be run locally with node 16 by running `npm install` then `npm start`. To use it as a starter for a new project, fork this repo, then follow the steps below.
 
-### Node
+## Node
 
 This project is compatible with node version 16 (LTS).
 
 NVM is recommended for easily manage installed node versions. Install nvm using this guide: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm). Then, run `nvm install 16` and `nvm use 16`.
 
-### Configure Environment Variables
+## Configure Environment Variables
 
 Create a new `.env` file using the example (`cp .env.example .env`). Errors will be logged to the console if the correct env variables do not exist.
 
@@ -41,7 +41,7 @@ This project is currently configured to accept the options `local`, `dev`, `stag
 
 If you decide to use different options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
 
-### Lightning Server SDK & Mock Data
+## Lightning Server SDK & Mock Data
 
 Generate an SDK your project's lightning server backend, then use it to replace the file `src/api/sdk.ts`.
 
@@ -53,7 +53,7 @@ In `mockApi.ts`, the `MockApi` class should implement the `Api` interface from y
 
 To use the mock API, select the Mock server from the login screen.
 
-### Project Organization
+## Project Organization
 
 All source code should be placed in the `src` directory. `App.tsx` contains the switch for rendering either the authenticated routes or unauthenticated routes depending on the auth state, and also provides react context to the app.
 
@@ -91,6 +91,6 @@ See the "Lightning Server SDK & Mock Data" section above. You shouldn't need to 
 
 This is a catch-all directory for utility functions, models, hooks, helpers, or providers.
 
-### Colors and Icons
+## Colors and Icons
 
-### Deployment
+## Deployment
