@@ -43,7 +43,14 @@ export const useSessionManager = (): {
       LocalStorageKey.BACKEND_URL
     )
 
-    const initialBackendURL = localStorageBackendURL ?? envBackendHTTP ?? "mock"
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const initialBackendURL = localStorageBackendURL || envBackendHTTP || "mock"
+
+    console.log({localStorageBackendURL, envBackendHTTP, initialBackendURL})
+
+    if (localStorageBackendURL !== initialBackendURL) {
+      localStorage.setItem(LocalStorageKey.BACKEND_URL, initialBackendURL)
+    }
 
     if (initialBackendURL === "mock") return new MockApi()
     return new LiveApi(initialBackendURL)
