@@ -22,11 +22,14 @@ export class MockApi implements Api {
   readonly auth = {
     emailLoginLink: async (email: string): Promise<void> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
+      myUser = faker.helpers.arrayElement(this.mockDatastore.users)
       alert(
         "You are using the mock API and will not receive an email. Refresh the page to log in."
       )
     },
     loginSSO: async (input: string): Promise<string> => {
+      localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
+      myUser = faker.helpers.arrayElement(this.mockDatastore.users)
       alert(
         "You are using the mock API and will not receive an email or text. Enter any code to log in."
       )

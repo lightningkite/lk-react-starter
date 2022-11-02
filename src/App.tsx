@@ -1,10 +1,10 @@
 import {ThemeProvider} from "@mui/material"
-import {Api, RequesterSession} from "api/sdk"
+import {Api, RequesterSession, User} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
 import Loading from "components/Loading"
 import MainLayout from "Layouts/MainLayout"
 import UnauthLayout from "Layouts/UnauthLayout"
-import React, {createContext, FC} from "react"
+import React, {createContext, FC, useEffect, useState} from "react"
 import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
 import {theme} from "./theme"
@@ -13,7 +13,8 @@ export const AuthContext = createContext({
   session: {} as RequesterSession,
   logout: (): void => {
     throw new Error("Used logout outside of AuthContext")
-  }
+  },
+  currentUser: {} as User
 })
 
 export const UnauthContext = createContext({
@@ -30,13 +31,23 @@ const App: FC = () => {
   const {api, changeBackendURL, session, authenticate, logout} =
     useSessionManager()
 
+  const [currentUser, setCurrentUser] = useState<User>()
+
   const isLoggedIn = !!session
+
+  useEffect(() => {
+    session?.auth.getSelf().then(setCurrentUser)
+  }, [isLoggedIn])
+
+  if (isLoggedIn && currentUser === undefined) {
+    return <Loading />
+  }
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {isLoggedIn ? (
-          <AuthContext.Provider value={{session, logout}}>
+        {session && currentUser ? (
+          <AuthContext.Provider value={{session, logout, currentUser}}>
             <MainLayout>
               <AuthRoutes />
             </MainLayout>

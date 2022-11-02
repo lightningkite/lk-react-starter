@@ -22,7 +22,7 @@ const navItems: Array<{label: string; to: string}> = [
 ]
 
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {
-  const {logout} = useContext(AuthContext)
+  const {logout, currentUser} = useContext(AuthContext)
 
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
   const closeMenu = (): void => setUserMenuAnchor(null)
@@ -45,7 +45,10 @@ const MainLayout: FC<{children: ReactNode}> = ({children}) => {
                 <Person />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="My User" />
+            <ListItemText
+              primary={currentUser.name}
+              secondary={currentUser.email}
+            />
           </ListItemButton>
 
           <Divider sx={{m: 2}} />
