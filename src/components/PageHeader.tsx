@@ -28,7 +28,9 @@ const PageHeader: FC<PropsWithChildren<PageHeaderProps>> = (props) => {
                 {label}
               </Link>
             ) : (
-              <Typography color="text.primary">{label}</Typography>
+              <Typography color="text.primary" key={path}>
+                {label}
+              </Typography>
             )
           )}
         </Breadcrumbs>
