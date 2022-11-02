@@ -12,8 +12,6 @@ The purpose of this project is to be a starting point for new React apps that us
 
 ## TODO
 
-- Generating icons and stuff
-- Setting theme color, description, titles
 - Change localstorage keys prefix
 - Birthday with MUIX date pickers
 
@@ -129,6 +127,12 @@ See the "Lightning Server SDK & Mock Data" section above. You shouldn't need to 
 
 This is a catch-all directory for utility functions, models, hooks, helpers, or providers.
 
-## Colors and Icons
-
 ## Deployment
+
+Before deploying, remember to update the following app information in the `public` directory:
+
+- Upload a new favicon and add other app icons, update these in `manifest.json`
+- Update site metadata in `manifest.json`. See [https://developer.mozilla.org/en-US/docs/Web/Manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest).
+- Update meta tags in `index.html`
+
+To create a production build, run `npm run build`.
