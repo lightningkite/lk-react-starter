@@ -7,7 +7,10 @@ import {AuthContext} from "App"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useEffect, useState} from "react"
-import {makeFormikTextFieldProps} from "utils/helpers/formHelpers"
+import {
+  makeFormikDatePickerProps,
+  makeFormikTextFieldProps
+} from "utils/helpers/formHelpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
@@ -71,16 +74,16 @@ export const UserForm: FC<UserFormProps> = (props) => {
   }, [user])
 
   return (
-    <Stack gap={2}>
+    <Stack gap={3}>
       <TextField label="Name" {...makeFormikTextFieldProps(formik, "name")} />
       <TextField label="Email" {...makeFormikTextFieldProps(formik, "email")} />
       <TextField label="Phone" {...makeFormikTextFieldProps(formik, "phone")} />
-      {/* <DatePicker
-        label="Birth Date"
-        minDate={dayjs().subtract(100, "year")}
+      <DatePicker
+        label="Birthday"
+        {...makeFormikDatePickerProps(formik, "birthday")}
+        minDate={dayjs().subtract(120, "year")}
         maxDate={dayjs()}
-        value={formik.values}
-      /> */}
+      />
 
       {error && <Alert severity="error">{error}</Alert>}
 
