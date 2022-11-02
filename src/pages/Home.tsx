@@ -1,10 +1,11 @@
-import {Container, Typography} from "@mui/material"
+import {Container} from "@mui/material"
+import PageHeader from "components/PageHeader"
 import React, {FC} from "react"
 
 export const Home: FC = () => {
   return (
     <Container>
-      <Typography variant="h1">Home Page</Typography>
+      <PageHeader title="Home Page" />
     </Container>
   )
 }

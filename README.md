@@ -19,6 +19,7 @@ The purpose of this project is to be a starting point for new React apps that us
 - Change localstorage keys prefix
 - Change deployment type options in env helpers, .env.example, check on login form to show controls
 - Formik
+- Birthday with MUIX date pickers
 
 ## Using the Starter Project
 

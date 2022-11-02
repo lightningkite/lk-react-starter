@@ -5,13 +5,13 @@ import {
   List,
   ListItemAvatar,
   ListItemButton,
-  ListItemText,
-  Typography
+  ListItemText
 } from "@mui/material"
 import {User} from "api/sdk"
 import {AuthContext} from "App"
 import ErrorAlert from "components/ErrorAlert"
 import Loading from "components/Loading"
+import PageHeader from "components/PageHeader"
 import React, {FC, useContext, useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
 
@@ -38,9 +38,9 @@ export const UserIndex: FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h1">Users List</Typography>
+      <PageHeader title="Users List" />
 
-      <Card sx={{mt: 3}}>
+      <Card>
         <List>
           {users.map((user) => (
             <ListItemButton

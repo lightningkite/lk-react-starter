@@ -1,4 +1,4 @@
-import {AccountCircle, Logout, Person} from "@mui/icons-material"
+import {AccountCircle, Logout} from "@mui/icons-material"
 import {
   Avatar,
   Box,
@@ -14,7 +14,7 @@ import {
 } from "@mui/material"
 import {AuthContext} from "App"
 import React, {FC, ReactNode, useContext, useState} from "react"
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
 
 const navItems: Array<{label: string; to: string}> = [
   {label: "Home", to: "/"},
@@ -23,6 +23,7 @@ const navItems: Array<{label: string; to: string}> = [
 
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {
   const {logout, currentUser} = useContext(AuthContext)
+  const navigate = useNavigate()
 
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
   const closeMenu = (): void => setUserMenuAnchor(null)
@@ -83,7 +84,12 @@ const MainLayout: FC<{children: ReactNode}> = ({children}) => {
           "aria-labelledby": "basic-button"
         }}
       >
-        <MenuItem onClick={undefined}>
+        <MenuItem
+          onClick={() => {
+            closeMenu()
+            navigate(`/users/${currentUser._id}`)
+          }}
+        >
           <ListItemIcon>
             <AccountCircle fontSize="small" />
           </ListItemIcon>
