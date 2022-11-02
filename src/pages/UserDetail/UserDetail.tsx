@@ -20,8 +20,12 @@ export const UserDetail: FC = () => {
       refreshCurrentUser()
     }
 
-    const newUser = await session.user.detail(userId as string)
-    setUser(newUser)
+    try {
+      const newUser = await session.user.detail(userId as string)
+      setUser(newUser)
+    } catch {
+      setUser(null)
+    }
   }
 
   useEffect(() => {

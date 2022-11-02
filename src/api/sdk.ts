@@ -18,6 +18,7 @@ export interface User {
   name: string
   email: string
   phone: string
+  birthday: string
   profilePic: string
   createdAt: string
   modifiedAt: string

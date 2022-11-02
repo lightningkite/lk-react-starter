@@ -1,4 +1,6 @@
 import {ThemeProvider} from "@mui/material"
+import {LocalizationProvider} from "@mui/x-date-pickers"
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 import {Api, RequesterSession, User} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
 import ErrorAlert from "components/ErrorAlert"
@@ -64,25 +66,29 @@ const App: FC = () => {
   }
 
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        {session && currentUser ? (
-          <AuthContext.Provider
-            value={{session, logout, currentUser, refreshCurrentUser}}
-          >
-            <MainLayout>
-              <AuthRoutes />
-            </MainLayout>
-          </AuthContext.Provider>
-        ) : (
-          <UnauthContext.Provider value={{api, changeBackendURL, authenticate}}>
-            <UnauthLayout>
-              <UnauthRoutes />
-            </UnauthLayout>
-          </UnauthContext.Provider>
-        )}
-      </ThemeProvider>
-    </BrowserRouter>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          {session && currentUser ? (
+            <AuthContext.Provider
+              value={{session, logout, currentUser, refreshCurrentUser}}
+            >
+              <MainLayout>
+                <AuthRoutes />
+              </MainLayout>
+            </AuthContext.Provider>
+          ) : (
+            <UnauthContext.Provider
+              value={{api, changeBackendURL, authenticate}}
+            >
+              <UnauthLayout>
+                <UnauthRoutes />
+              </UnauthLayout>
+            </UnauthContext.Provider>
+          )}
+        </ThemeProvider>
+      </BrowserRouter>
+    </LocalizationProvider>
   )
 }
 

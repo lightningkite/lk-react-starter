@@ -14,7 +14,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       // This is the primary color used throughout the app. See: https://mui.com/material-ui/customization/palette/#using-a-color-object
-      main: "#13394C"
+      main: "#1c386b"
     },
     background: {
       default: "#F6F6F6"
