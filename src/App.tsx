@@ -10,6 +10,7 @@ import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
 import {theme} from "./theme"
 
+// AuthContext is available when the user is authenticated
 export const AuthContext = createContext({
   session: {} as RequesterSession,
   logout: (): void => {
@@ -21,6 +22,7 @@ export const AuthContext = createContext({
   }
 })
 
+// UnauthContext is available when the user is not authenticated (login screen)
 export const UnauthContext = createContext({
   api: {} as Api,
   authenticate: (userToken: string): void => {

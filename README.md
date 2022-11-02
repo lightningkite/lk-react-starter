@@ -33,6 +33,18 @@ NVM is recommended for easily manage installed node versions. Install nvm using 
 
 ### Configure Environment Variables
 
+Create a new `.env` file using the example (`cp .env.example .env`). Errors will be logged to the console if the correct env variables do not exist.
+
+#### `REACT_APP_BACKEND_HTTP_URL`
+
+This is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
+
+#### `REACT_APP_DEPLOYMENT_TYPE`
+
+This project is currently configured to accept the options `local`, `dev`, `staging`, or `production`.
+
+If you decide to use different options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
+
 ### Lightning Server SDK
 
 ### Project Organization
