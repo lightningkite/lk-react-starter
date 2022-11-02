@@ -1,4 +1,4 @@
-import {ThemeProvider} from "@mui/material"
+import {Alert, ThemeProvider} from "@mui/material"
 import {Api, RequesterSession, User} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
 import Loading from "components/Loading"
@@ -14,7 +14,10 @@ export const AuthContext = createContext({
   logout: (): void => {
     throw new Error("Used logout outside of AuthContext")
   },
-  currentUser: {} as User
+  currentUser: {} as User,
+  refreshCurrentUser: (): Promise<void> => {
+    throw new Error("Used refreshCurrentUser outside of AuthContext")
+  }
 })
 
 export const UnauthContext = createContext({
@@ -31,23 +34,43 @@ const App: FC = () => {
   const {api, changeBackendURL, session, authenticate, logout} =
     useSessionManager()
 
-  const [currentUser, setCurrentUser] = useState<User>()
+  const [currentUser, setCurrentUser] = useState<User | null>()
 
   const isLoggedIn = !!session
 
+  const refreshCurrentUser = async (): Promise<void> => {
+    if (!session) {
+      setCurrentUser(undefined)
+    }
+    await session?.auth
+      .getSelf()
+      .then(setCurrentUser)
+      .catch(() => setCurrentUser(null))
+  }
+
   useEffect(() => {
-    session?.auth.getSelf().then(setCurrentUser)
+    refreshCurrentUser()
   }, [isLoggedIn])
 
   if (isLoggedIn && currentUser === undefined) {
     return <Loading />
   }
 
+  if (currentUser === null) {
+    return (
+      <Alert severity="error" sx={{m: 3}}>
+        Error loading current user
+      </Alert>
+    )
+  }
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         {session && currentUser ? (
-          <AuthContext.Provider value={{session, logout, currentUser}}>
+          <AuthContext.Provider
+            value={{session, logout, currentUser, refreshCurrentUser}}
+          >
             <MainLayout>
               <AuthRoutes />
             </MainLayout>
