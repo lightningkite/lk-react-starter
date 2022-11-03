@@ -4,7 +4,7 @@ import React, {FC} from "react"
 
 export const Home: FC = () => {
   return (
-    <Container>
+    <Container maxWidth="md">
       <PageHeader title="Home Page" />
     </Container>
   )

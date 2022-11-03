@@ -7,7 +7,7 @@ import MyUserMenu from "./MyUserMenu"
 const navItems: Array<{label: string; to: string}> = [
   {label: "Home", to: "/"},
   {label: "Users", to: "/users"},
-  {label: "Another Page", to: "/another-page"}
+  {label: "Formik Input Demo", to: "/input-demo"}
 ]
 
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {

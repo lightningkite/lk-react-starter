@@ -78,20 +78,20 @@ export function makeFormikCheckboxProps<T extends FormikValues>(
   }
 }
 
-// export function makeFormikAutocompleteProps<
-//   T extends FormikValues,
-//   K extends keyof T,
-//   V
-// >(formik: ReturnType<typeof useFormik<T>>, field: K) {
-//   return {
-//     value: formik.values[field],
-//     onChange: (value: V | null) =>
-//       formik.setFieldValue(field.toString(), value),
-//     error: !!formik.errors[field] && !!formik.touched[field],
-//     helperText:
-//       formik.touched[field] && (formik.errors[field] as string | undefined)
-//   }
-// }
+export function makeFormikAutocompleteProps<
+  T extends FormikValues,
+  K extends keyof T,
+  V
+>(formik: ReturnType<typeof useFormik<T>>, field: K) {
+  return {
+    value: formik.values[field],
+    onChange: (value: V | null) =>
+      formik.setFieldValue(field.toString(), value),
+    error: !!formik.errors[field] && !!formik.touched[field],
+    helperText:
+      formik.touched[field] && (formik.errors[field] as string | undefined)
+  }
+}
 
 // export function makeFormikHCPSelectProps<T extends FormikValues>(
 //   formik: ReturnType<typeof useFormik<T>>,

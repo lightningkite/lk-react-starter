@@ -38,13 +38,13 @@ export const UserIndex: FC = () => {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <PageHeader title="Users List">
         <Button>Add User</Button>
       </PageHeader>
 
       <Card>
-        <List>
+        <List sx={{}}>
           {users.map((user) => (
             <ListItemButton
               key={user._id}
