@@ -8,16 +8,20 @@ import {
   TextField,
   Typography
 } from "@mui/material"
+import {DatePicker, DateTimePicker} from "@mui/x-date-pickers"
 import {User} from "api/sdk"
 import {AuthContext} from "App"
 import FormSection from "components/FormSection"
 import PageHeader from "components/PageHeader"
 import {RestAutocompleteInput} from "components/RestAutocompleteInput"
+import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext} from "react"
 import {
   makeFormikAutocompleteProps,
   makeFormikCheckboxProps,
+  makeFormikDatePickerProps,
+  makeFormikDateTimePickerProps,
   makeFormikTextFieldProps
 } from "utils/helpers/formHelpers"
 
@@ -30,14 +34,12 @@ export const FormikInputDemo: FC = () => {
       gmailUser: null as User | null,
       text: "",
       number: 0,
-      checkbox: false
+      checkbox: false,
+      date: new Date(),
+      dateTime: new Date()
     },
     onSubmit: async (values) => {
-      const formattedValues = {
-        ...values
-      }
-
-      console.log(formattedValues)
+      console.log(values)
     }
   })
 
@@ -102,6 +104,24 @@ export const FormikInputDemo: FC = () => {
                 <Checkbox {...makeFormikCheckboxProps(formik, "checkbox")} />
               }
               label="Checkbox input"
+            />
+          </FormSection>
+
+          <FormSection
+            title="Dates & Times"
+            subtitle="Date and time input with MUI-X date pickers"
+          >
+            <DatePicker
+              label="Pick a date"
+              {...makeFormikDatePickerProps(formik, "date")}
+              minDate={dayjs().subtract(5, "year")}
+              maxDate={dayjs().add(1, "year")}
+            />
+            <DateTimePicker
+              label="Pick a date and time"
+              {...makeFormikDateTimePickerProps(formik, "dateTime")}
+              minDateTime={dayjs().subtract(1, "month")}
+              maxDateTime={dayjs().add(1, "month")}
             />
           </FormSection>
 
