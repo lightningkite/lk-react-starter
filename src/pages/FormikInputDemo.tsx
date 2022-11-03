@@ -1,4 +1,13 @@
-import {Card, CardContent, Container, Typography} from "@mui/material"
+import {
+  Button,
+  Card,
+  CardContent,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  TextField,
+  Typography
+} from "@mui/material"
 import {User} from "api/sdk"
 import {AuthContext} from "App"
 import FormSection from "components/FormSection"
@@ -6,7 +15,11 @@ import PageHeader from "components/PageHeader"
 import {RestAutocompleteInput} from "components/RestAutocompleteInput"
 import {useFormik} from "formik"
 import React, {FC, useContext} from "react"
-import {makeFormikAutocompleteProps} from "utils/helpers/formHelpers"
+import {
+  makeFormikAutocompleteProps,
+  makeFormikCheckboxProps,
+  makeFormikTextFieldProps
+} from "utils/helpers/formHelpers"
 
 export const FormikInputDemo: FC = () => {
   const {session} = useContext(AuthContext)
@@ -14,7 +27,10 @@ export const FormikInputDemo: FC = () => {
   const formik = useFormik({
     initialValues: {
       multipleUsers: [] as User[],
-      gmailUser: null as User | null
+      gmailUser: null as User | null,
+      text: "",
+      number: 0,
+      checkbox: false
     },
     onSubmit: async (values) => {
       const formattedValues = {
@@ -65,6 +81,40 @@ export const FormikInputDemo: FC = () => {
               searchProperties={["name", "email"]}
             />
           </FormSection>
+
+          <FormSection
+            title="MUI Inputs"
+            subtitle="Managing the basic MUI inputs with Formik"
+          >
+            <TextField
+              label="Text Input"
+              {...makeFormikTextFieldProps(formik, "text")}
+            />
+
+            <TextField
+              label="Numeric Input"
+              type="number"
+              {...makeFormikTextFieldProps(formik, "number")}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox {...makeFormikCheckboxProps(formik, "checkbox")} />
+              }
+              label="Checkbox input"
+            />
+          </FormSection>
+
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{mt: 5}}
+            onClick={() => {
+              formik.submitForm()
+            }}
+          >
+            Log Values to Console
+          </Button>
         </CardContent>
       </Card>
     </Container>
