@@ -1,5 +1,5 @@
 import {CheckboxProps, TextField, TextFieldProps} from "@mui/material"
-import {DatePickerProps, DateTimePickerProps} from "@mui/x-date-pickers"
+import {DateTimePickerProps} from "@mui/x-date-pickers"
 // import {RichTextEditorProps} from "components/Activity/ActivityEditor"
 // import {HCPSelectProps} from "components/HCPSelect"
 import {Dayjs} from "dayjs"

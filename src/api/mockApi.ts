@@ -1,6 +1,6 @@
 import {faker} from "@faker-js/faker"
+import {mockRestEndpointFunctions} from "@lightningkite/lightning-server-simplified"
 import {LocalStorageKey} from "utils/constants"
-import {generateFakeMockCrud} from "./mockCrud"
 import {generateMockDatastore} from "./mockDatastore"
 import {Api, SSOAuthSubmission, User} from "./sdk"
 
@@ -17,7 +17,10 @@ export class MockApi implements Api {
     }
   }
 
-  readonly user = generateFakeMockCrud<User>(this.mockDatastore.users, "user")
+  readonly user = mockRestEndpointFunctions<User>(
+    this.mockDatastore.users,
+    "user"
+  )
 
   readonly auth = {
     emailLoginLink: async (email: string): Promise<void> => {

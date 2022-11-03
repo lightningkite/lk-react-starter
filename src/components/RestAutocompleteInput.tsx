@@ -1,6 +1,9 @@
-import {Condition} from "@lightningkite/lightning-server-simplified"
+import {
+  Condition,
+  HasId,
+  SessionRestEndpoint
+} from "@lightningkite/lightning-server-simplified"
 import {Autocomplete, CircularProgress, TextField} from "@mui/material"
-import {HasId, SessionEndpoint} from "api/crud"
 import React, {ReactElement, useEffect, useState} from "react"
 import {makeSearchConditions} from "utils/helpers/miscHelpers"
 import useThrottle from "utils/hooks/useThrottle"
@@ -16,7 +19,7 @@ export interface RestAutocompleteInputProps<
   Multiple extends boolean | undefined
 > {
   /** The model rest endpoint to fetch options from */
-  apiEndpoint: SessionEndpoint<T>
+  apiEndpoint: SessionRestEndpoint<T>
   /** True to allow the user to select multiple options */
   multiple?: Multiple
   /** Additional conditions to filter the values when requested from the endpoint */

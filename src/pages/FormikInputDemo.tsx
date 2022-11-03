@@ -38,6 +38,7 @@ export const FormikInputDemo: FC = () => {
       time: new Date(),
       dateTime: new Date()
     },
+    // Validation schema is omitted from this demo. See src/pages/UserDetail/UserForm.tsx for an example.
     onSubmit: async (values) => {
       console.log(values)
     }

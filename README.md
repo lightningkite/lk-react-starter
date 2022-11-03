@@ -1,18 +1,23 @@
 # Lightning Kite React Starter
 
-The purpose of this project is to be a starting point for new React apps that use Lightning Server as the backend. It is already set up with many packages that will be used in almost all projects including:
+The purpose of this project is to be a starting point for new React apps that use Lightning Server as the backend. It is already set up with many packages and components that will be used in almost all projects including:
 
 - Authentication
 - Ability to switch which backend deployment is used from the login screen
 - Mock API for local development without running the backend
 - MUI UI component library including material icons
 - React Router with several example routes for reference
-- Formik for form state management
+- Formik for form state management with Yup for validation
 - Eslint, Prettier, and automatic import reordering
 
-## TODO
+Documentation for included packages:
 
-- Birthday with MUIX date pickers
+- React MUI basic components: [mui.com/material-ui/getting-started/overview/](https://mui.com/material-ui/getting-started/overview/)
+- React MUI-X date pickers and data grid: [mui.com/x/introduction/](https://mui.com/x/introduction/)
+- React Router: [reactrouter.com/en/main/start/overview](https://reactrouter.com/en/main/start/overview)
+- Formik: [formik.org/docs/overview](https://formik.org/docs/overview)
+- Yup: [npmjs.com/package/yup](https://www.npmjs.com/package/yup)
+- Faker: [fakerjs.dev/api/](https://fakerjs.dev/api/)
 
 ## Using the Starter Project
 
