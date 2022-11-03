@@ -8,7 +8,7 @@ import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useEffect, useState} from "react"
 import {
-  makeFormikDatePickerProps,
+  makeFormikDateTimePickerProps,
   makeFormikTextFieldProps
 } from "utils/helpers/formHelpers"
 import * as yup from "yup"
@@ -82,7 +82,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       <TextField label="Phone" {...makeFormikTextFieldProps(formik, "phone")} />
       <DatePicker
         label="Birthday"
-        {...makeFormikDatePickerProps(formik, "birthday")}
+        {...makeFormikDateTimePickerProps(formik, "birthday")}
         minDate={dayjs().subtract(120, "year")}
         maxDate={dayjs()}
       />

@@ -8,7 +8,7 @@ const UnauthLayout: FC<{children: ReactNode}> = ({children}) => {
       justifyContent="space-evenly"
       sx={{
         height: "100vh",
-        backgroundColor: "background.default"
+        bgcolor: "primary.main"
       }}
     >
       <Container maxWidth="xs">

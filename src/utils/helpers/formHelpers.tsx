@@ -106,35 +106,13 @@ export function makeFormikAutocompleteProps<
 //   }
 // }
 
-export function makeFormikDatePickerProps<T extends FormikValues>(
-  formik: ReturnType<typeof useFormik<T>>,
-  field: keyof T
-): DatePickerProps<Date | null, unknown> {
-  return {
-    value: formik.values[field] as unknown as Date | null,
-    onChange: (value) => {
-      formik.setFieldValue(
-        field.toString(),
-        (value as Dayjs | null)?.toDate() ?? null
-      )
-    },
-    renderInput: (params) => (
-      <TextField
-        {...params}
-        helperText={
-          formik.touched[field] && formik.errors[field] && "Invalid date"
-        }
-        error={formik.touched[field] && !!formik.errors[field]}
-        fullWidth
-      />
-    )
-  }
-}
-
 export function makeFormikDateTimePickerProps<T extends FormikValues>(
   formik: ReturnType<typeof useFormik<T>>,
   field: keyof T
-): DateTimePickerProps<Date | null, unknown> {
+): Pick<
+  DateTimePickerProps<Date | null, unknown>,
+  "value" | "onChange" | "renderInput"
+> {
   return {
     value: formik.values[field] as unknown as Date | null,
     onChange: (value) => {

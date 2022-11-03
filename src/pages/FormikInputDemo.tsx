@@ -8,7 +8,7 @@ import {
   TextField,
   Typography
 } from "@mui/material"
-import {DatePicker, DateTimePicker} from "@mui/x-date-pickers"
+import {DatePicker, DateTimePicker, TimePicker} from "@mui/x-date-pickers"
 import {User} from "api/sdk"
 import {AuthContext} from "App"
 import FormSection from "components/FormSection"
@@ -20,7 +20,6 @@ import React, {FC, useContext} from "react"
 import {
   makeFormikAutocompleteProps,
   makeFormikCheckboxProps,
-  makeFormikDatePickerProps,
   makeFormikDateTimePickerProps,
   makeFormikTextFieldProps
 } from "utils/helpers/formHelpers"
@@ -36,6 +35,7 @@ export const FormikInputDemo: FC = () => {
       number: 0,
       checkbox: false,
       date: new Date(),
+      time: new Date(),
       dateTime: new Date()
     },
     onSubmit: async (values) => {
@@ -57,7 +57,7 @@ export const FormikInputDemo: FC = () => {
           <FormSection
             disableTopPadding
             title="Rest Autocomplete Input"
-            subtitle="The RestAutocompleteInput component fetched options asynchronously from the server as the user types. It is save to use with large amounts of options since it only fetched 10 at a time."
+            subtitle="The RestAutocompleteInput component fetches options asynchronously from the server as the user types. Only 10 items at a time are fetched from the server."
           >
             <RestAutocompleteInput
               {...makeFormikAutocompleteProps(formik, "multipleUsers")}
@@ -113,9 +113,13 @@ export const FormikInputDemo: FC = () => {
           >
             <DatePicker
               label="Pick a date"
-              {...makeFormikDatePickerProps(formik, "date")}
+              {...makeFormikDateTimePickerProps(formik, "date")}
               minDate={dayjs().subtract(5, "year")}
               maxDate={dayjs().add(1, "year")}
+            />
+            <TimePicker
+              label="Pick a Time"
+              {...makeFormikDateTimePickerProps(formik, "time")}
             />
             <DateTimePicker
               label="Pick a date and time"
