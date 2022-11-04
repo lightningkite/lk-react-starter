@@ -1,3 +1,4 @@
+import {HoverHelp} from "@lightningkite/mui-lightning-components"
 import {Button, Card, CardContent, Container} from "@mui/material"
 import {User} from "api/sdk"
 import {AuthContext} from "App"
@@ -49,7 +50,9 @@ export const UserDetail: FC = () => {
           [user.name, ""]
         ]}
       >
-        <Button color="error">Delete</Button>
+        <HoverHelp description="Delete this user">
+          <Button color="error">Delete</Button>
+        </HoverHelp>
       </PageHeader>
 
       <Card>

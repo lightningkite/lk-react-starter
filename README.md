@@ -12,12 +12,13 @@ The purpose of this project is to be a starting point for new React apps that us
 
 Documentation for included packages:
 
-- React MUI basic components: [mui.com/material-ui/getting-started/overview/](https://mui.com/material-ui/getting-started/overview/)
-- React MUI-X date pickers and data grid: [mui.com/x/introduction/](https://mui.com/x/introduction/)
-- React Router: [reactrouter.com/en/main/start/overview](https://reactrouter.com/en/main/start/overview)
-- Formik: [formik.org/docs/overview](https://formik.org/docs/overview)
-- Yup: [npmjs.com/package/yup](https://www.npmjs.com/package/yup)
-- Faker: [fakerjs.dev/api/](https://fakerjs.dev/api/)
+- [MUI Lightning Components](https://www.npmjs.com/package/@lightningkite/mui-lightning-components)
+- [React MUI basic components](https://mui.com/material-ui/getting-started/overview/)
+- React MUI-X [date pickers](https://mui.com/x/react-date-pickers/getting-started/) and [data grid](https://mui.com/x/react-data-grid/)
+- [React Router](https://reactrouter.com/en/main/start/overview)
+- [Formik](https://formik.org/docs/overview)
+- [Yup](https://www.npmjs.com/package/yup)
+- [Faker](https://fakerjs.dev/api/)
 
 ## Using the Starter Project
 
