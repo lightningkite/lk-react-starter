@@ -64,7 +64,7 @@ export const FormikInputDemo: FC = () => {
               {...makeFormikAutocompleteProps(formik, "multipleUsers")}
               multiple
               label="Select multiple users"
-              apiEndpoint={session.user}
+              restEndpoint={session.user}
               getOptionLabel={(user) => `${user.name}`}
               searchProperties={["name"]}
             />
@@ -72,7 +72,7 @@ export const FormikInputDemo: FC = () => {
             <RestAutocompleteInput
               {...makeFormikAutocompleteProps(formik, "gmailUser")}
               label="User with gmail email"
-              apiEndpoint={session.user}
+              restEndpoint={session.user}
               getOptionLabel={(user) => `${user.name} (${user.email})`}
               additionalQueryConditions={[
                 {

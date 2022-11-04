@@ -6,7 +6,7 @@ export interface MockDatastore {
 }
 
 export const generateMockDatastore = (): MockDatastore => {
-  const users = generateUsers(10)
+  const users = generateUsers(25)
 
   return {users}
 }

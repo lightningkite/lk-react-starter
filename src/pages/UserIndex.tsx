@@ -1,41 +1,13 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Container,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemText
-} from "@mui/material"
-import {User} from "api/sdk"
+import {RestDataTable} from "@lightningkite/mui-lightning-components"
+import {Button, Container} from "@mui/material"
 import {AuthContext} from "App"
-import ErrorAlert from "components/ErrorAlert"
-import Loading from "components/Loading"
 import PageHeader from "components/PageHeader"
-import React, {FC, useContext, useEffect, useState} from "react"
+import React, {FC, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 
 export const UserIndex: FC = () => {
   const navigate = useNavigate()
   const {session} = useContext(AuthContext)
-
-  const [users, setUsers] = useState<User[] | null>()
-
-  useEffect(() => {
-    session.user
-      .query({orderBy: ["name"]})
-      .then(setUsers)
-      .catch(() => setUsers(null))
-  }, [])
-
-  if (users === undefined) {
-    return <Loading />
-  }
-
-  if (users === null) {
-    return <ErrorAlert>Error loading users</ErrorAlert>
-  }
 
   return (
     <Container maxWidth="md">
@@ -43,21 +15,23 @@ export const UserIndex: FC = () => {
         <Button>Add User</Button>
       </PageHeader>
 
-      <Card>
-        <List sx={{}}>
-          {users.map((user) => (
-            <ListItemButton
-              key={user._id}
-              onClick={() => navigate(`/users/${user._id}`)}
-            >
-              <ListItemAvatar>
-                <Avatar src={user.profilePic} />
-              </ListItemAvatar>
-              <ListItemText primary={user.name} secondary={user.email} />
-            </ListItemButton>
-          ))}
-        </List>
-      </Card>
+      <RestDataTable
+        restEndpoint={session.user}
+        onRowClick={(user) => navigate(`/users/${user._id}`)}
+        searchFields={["name", "email"]}
+        columns={[
+          {field: "name", headerName: "User Name", flex: 1},
+          {field: "email", headerName: "Email", flex: 1},
+          {
+            field: "modifiedAt",
+            headerName: "Last Modified",
+            width: 120,
+            type: "date",
+            valueGetter: ({value}) => new Date(value),
+            valueFormatter: ({value}) => value.toLocaleDateString()
+          }
+        ]}
+      />
     </Container>
   )
 }
