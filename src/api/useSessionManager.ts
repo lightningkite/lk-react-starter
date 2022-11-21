@@ -2,7 +2,7 @@ import {useState} from "react"
 import {LocalStorageKey} from "utils/constants"
 import {envBackendHTTP} from "utils/helpers/envHelpers"
 import {MockApi} from "./mockApi"
-import {Api, LiveApi, RequesterSession} from "./sdk"
+import {Api, LiveApi, UserSession} from "./sdk"
 
 export interface URLOption {
   url: string
@@ -10,10 +10,6 @@ export interface URLOption {
 }
 
 export const backendURLOptions: URLOption[] = [
-  {
-    label: "Dev",
-    url: "https://dev.example.com/api"
-  },
   {
     label: "Stage",
     url: "https://stage.example.com/api"
@@ -34,7 +30,7 @@ if (
 export const useSessionManager = (): {
   api: Api
   changeBackendURL: (backendURL: string) => void
-  session: RequesterSession | null
+  session: UserSession | null
   authenticate: (userToken: string) => void
   logout: () => void
 } => {
@@ -46,8 +42,6 @@ export const useSessionManager = (): {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const initialBackendURL = localStorageBackendURL || envBackendHTTP || "mock"
 
-    console.log({localStorageBackendURL, envBackendHTTP, initialBackendURL})
-
     if (localStorageBackendURL !== initialBackendURL) {
       localStorage.setItem(LocalStorageKey.BACKEND_URL, initialBackendURL)
     }
@@ -57,17 +51,17 @@ export const useSessionManager = (): {
   })
 
   // Null if not logged in, a session if logged in
-  const [session, setSession] = useState<RequesterSession | null>(() => {
+  const [session, setSession] = useState<UserSession | null>(() => {
     const token = localStorage.getItem(LocalStorageKey.USER_TOKEN)
 
     if (token) {
-      return new RequesterSession(api, token)
+      return new UserSession(api, token)
     }
     return null
   })
 
   const authenticate = (userToken: string) => {
-    setSession(new RequesterSession(api, userToken))
+    setSession(new UserSession(api, userToken))
     localStorage.setItem(LocalStorageKey.USER_TOKEN, userToken)
   }
 

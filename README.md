@@ -43,7 +43,7 @@ Create a new `.env` file using the example. Errors will be logged to the console
 
 **REACT_APP_BACKEND_HTTP_URL** is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
 
-**REACT_APP_DEPLOYMENT_TYPE** can be set to `local`, `dev`, `staging`, or `production`.
+**REACT_APP_DEPLOYMENT_TYPE** can be set to `local`, `staging`, or `production`.
 
 If you need to use different deployment type options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
 
@@ -65,7 +65,6 @@ REACT_APP_DEPLOYMENT_TYPE=local
 
 export enum DeploymentType {
   LOCAL = "local",
-  DEV = "dev",
   STAGING = "staging",
   PRODUCTION = "production"
 }

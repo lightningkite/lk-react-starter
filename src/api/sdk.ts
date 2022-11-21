@@ -24,213 +24,215 @@ export interface User {
   modifiedAt: string
 }
 
-export interface SSOAuthSubmission {
-  value: string
-  clientKey: string
+export interface EmailPinLogin {
+  email: string
+  pin: string
+}
+
+export interface UploadInformation {
+  uploadUrl: string
+  futureCallToken: string
 }
 
 export interface Api {
   readonly auth: {
+    refreshToken(userToken: string): Promise<string>
+    getSelf(userToken: string): Promise<User>
     emailLoginLink(input: string): Promise<void>
-    loginSSO(input: string): Promise<string>
-    submitSSO(input: SSOAuthSubmission): Promise<string>
-    getSelf(requesterToken: string): Promise<User>
+    emailPINLogin(input: EmailPinLogin): Promise<string>
   }
 
   readonly user: {
     query(
       input: Query<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Query<User>>, File>
     ): Promise<Array<User>>
-    detail(id: string, requesterToken: string): Promise<User>
+    detail(id: string, userToken: string): Promise<User>
     insertBulk(
       input: Array<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>>
     insert(
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User>
     upsert(
       id: string,
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User>
     bulkReplace(
       input: Array<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>>
     replace(
       id: string,
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User>
     bulkModify(
       input: MassModification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<MassModification<User>>, File>
     ): Promise<number>
     modifyWithDiff(
       id: string,
       input: Modification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<EntryChange<User>>
     modify(
       id: string,
       input: Modification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<User>
     bulkDelete(
       input: Condition<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number>
-    delete(id: string, requesterToken: string): Promise<void>
+    delete(id: string, userToken: string): Promise<void>
     count(
       input: Condition<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number>
     groupCount(
       input: GroupCountQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<GroupCountQuery<User>>, File>
     ): Promise<Record<string, number>>
     aggregate(
       input: AggregateQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<AggregateQuery<User>>, File>
     ): Promise<number | null | undefined>
     groupAggregate(
       input: GroupAggregateQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<GroupAggregateQuery<User>>, File>
     ): Promise<Record<string, number | null | undefined>>
   }
 }
 
-export class RequesterSession {
-  constructor(public api: Api, public requesterToken: string) {}
+export class UserSession {
+  constructor(public api: Api, public userToken: string) {}
 
   readonly auth = {
-    api: this.api,
-    requesterToken: this.requesterToken,
-
-    getSelf(): Promise<User> {
-      return this.api.auth.getSelf(this.requesterToken)
+    refreshToken: (): Promise<string> => {
+      return this.api.auth.refreshToken(this.userToken)
     },
-    emailLoginLink(input: string): Promise<void> {
+    getSelf: (): Promise<User> => {
+      return this.api.auth.getSelf(this.userToken)
+    },
+    emailLoginLink: (input: string): Promise<void> => {
       return this.api.auth.emailLoginLink(input)
     },
-    loginSSO(input: string): Promise<string> {
-      return this.api.auth.loginSSO(input)
-    },
-    submitSSO(input: SSOAuthSubmission): Promise<string> {
-      return this.api.auth.submitSSO(input)
+    emailPINLogin: (input: EmailPinLogin): Promise<string> => {
+      return this.api.auth.emailPINLogin(input)
     }
   }
 
   readonly user = {
     api: this.api,
-    requesterToken: this.requesterToken,
+    userToken: this.userToken,
     query(
       input: Query<User>,
       files?: Record<Path<Query<User>>, File>
     ): Promise<Array<User>> {
-      return this.api.user.query(input, this.requesterToken, files)
+      return this.api.user.query(input, this.userToken, files)
     },
     detail(id: string): Promise<User> {
-      return this.api.user.detail(id, this.requesterToken)
+      return this.api.user.detail(id, this.userToken)
     },
     insertBulk(
       input: Array<User>,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>> {
-      return this.api.user.insertBulk(input, this.requesterToken, files)
+      return this.api.user.insertBulk(input, this.userToken, files)
     },
     insert(input: User, files?: Record<Path<User>, File>): Promise<User> {
-      return this.api.user.insert(input, this.requesterToken, files)
+      return this.api.user.insert(input, this.userToken, files)
     },
     upsert(
       id: string,
       input: User,
       files?: Record<Path<User>, File>
     ): Promise<User> {
-      return this.api.user.upsert(id, input, this.requesterToken, files)
+      return this.api.user.upsert(id, input, this.userToken, files)
     },
     bulkReplace(
       input: Array<User>,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>> {
-      return this.api.user.bulkReplace(input, this.requesterToken, files)
+      return this.api.user.bulkReplace(input, this.userToken, files)
     },
     replace(
       id: string,
       input: User,
       files?: Record<Path<User>, File>
     ): Promise<User> {
-      return this.api.user.replace(id, input, this.requesterToken, files)
+      return this.api.user.replace(id, input, this.userToken, files)
     },
     bulkModify(
       input: MassModification<User>,
       files?: Record<Path<MassModification<User>>, File>
     ): Promise<number> {
-      return this.api.user.bulkModify(input, this.requesterToken, files)
+      return this.api.user.bulkModify(input, this.userToken, files)
     },
     modifyWithDiff(
       id: string,
       input: Modification<User>,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<EntryChange<User>> {
-      return this.api.user.modifyWithDiff(id, input, this.requesterToken, files)
+      return this.api.user.modifyWithDiff(id, input, this.userToken, files)
     },
     modify(
       id: string,
       input: Modification<User>,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<User> {
-      return this.api.user.modify(id, input, this.requesterToken, files)
+      return this.api.user.modify(id, input, this.userToken, files)
     },
     bulkDelete(
       input: Condition<User>,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number> {
-      return this.api.user.bulkDelete(input, this.requesterToken, files)
+      return this.api.user.bulkDelete(input, this.userToken, files)
     },
     delete(id: string): Promise<void> {
-      return this.api.user.delete(id, this.requesterToken)
+      return this.api.user.delete(id, this.userToken)
     },
     count(
       input: Condition<User>,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number> {
-      return this.api.user.count(input, this.requesterToken, files)
+      return this.api.user.count(input, this.userToken, files)
     },
     groupCount(
       input: GroupCountQuery<User>,
       files?: Record<Path<GroupCountQuery<User>>, File>
     ): Promise<Record<string, number>> {
-      return this.api.user.groupCount(input, this.requesterToken, files)
+      return this.api.user.groupCount(input, this.userToken, files)
     },
     aggregate(
       input: AggregateQuery<User>,
       files?: Record<Path<AggregateQuery<User>>, File>
     ): Promise<number | null | undefined> {
-      return this.api.user.aggregate(input, this.requesterToken, files)
+      return this.api.user.aggregate(input, this.userToken, files)
     },
     groupAggregate(
       input: GroupAggregateQuery<User>,
       files?: Record<Path<GroupAggregateQuery<User>>, File>
     ): Promise<Record<string, number | null | undefined>> {
-      return this.api.user.groupAggregate(input, this.requesterToken, files)
+      return this.api.user.groupAggregate(input, this.userToken, files)
     }
   }
 }
@@ -243,31 +245,30 @@ export class LiveApi implements Api {
   ) {}
 
   readonly auth = {
-    httpUrl: this.httpUrl,
-    socketUrl: this.socketUrl,
-    extraHeaders: this.extraHeaders,
-    emailLoginLink(input: string): Promise<void> {
-      return apiCall(`${this.httpUrl}/auth/login-email-link`, input, {
+    refreshToken: (userToken: string): Promise<string> => {
+      return apiCall(`${this.httpUrl}/auth/refresh-token`, undefined, {
+        method: "GET",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
+    },
+    getSelf: (userToken: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/auth/self`, undefined, {
+        method: "GET",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
+    },
+    emailLoginLink: (input: string): Promise<void> => {
+      return apiCall(`${this.httpUrl}/auth/login-email`, input, {
         method: "POST"
       }).then((x) => undefined)
     },
-    loginSSO(input: string): Promise<string> {
-      return apiCall(`${this.httpUrl}/auth/login-sso`, input, {
+    emailPINLogin: (input: EmailPinLogin): Promise<string> => {
+      return apiCall(`${this.httpUrl}/auth/login-email-pin`, input, {
         method: "POST"
-      }).then((x) => x.json())
-    },
-    submitSSO(input: SSOAuthSubmission): Promise<string> {
-      return apiCall(`${this.httpUrl}/auth/submit-sso`, input, {
-        method: "POST"
-      }).then((x) => x.json())
-    },
-    getSelf(requesterToken: string): Promise<User> {
-      return apiCall(`${this.httpUrl}/auth/self/user`, undefined, {
-        method: "GET",
-        headers: {
-          ...this.extraHeaders,
-          Authorization: `Bearer ${requesterToken}`
-        }
       }).then((x) => x.json())
     }
   }
@@ -278,7 +279,7 @@ export class LiveApi implements Api {
     extraHeaders: this.extraHeaders,
     query(
       input: Query<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Query<User>>, File>
     ): Promise<Array<User>> {
       return apiCall(
@@ -286,24 +287,24 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
       ).then((x) => x.json())
     },
-    detail(id: string, requesterToken: string): Promise<User> {
+    detail(id: string, userToken: string): Promise<User> {
       return apiCall(`${this.httpUrl}/activity-tags/rest/${id}`, undefined, {
         method: "GET",
-        headers: requesterToken
-          ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
           : this.extraHeaders
       }).then((x) => x.json())
     },
     insertBulk(
       input: Array<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>> {
       return apiCall(
@@ -311,8 +312,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -320,7 +321,7 @@ export class LiveApi implements Api {
     },
     insert(
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User> {
       return apiCall(
@@ -328,8 +329,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -338,7 +339,7 @@ export class LiveApi implements Api {
     upsert(
       id: string,
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User> {
       return apiCall(
@@ -346,8 +347,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -355,7 +356,7 @@ export class LiveApi implements Api {
     },
     bulkReplace(
       input: Array<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Array<User>>, File>
     ): Promise<Array<User>> {
       return apiCall(
@@ -363,8 +364,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "PUT",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -373,7 +374,7 @@ export class LiveApi implements Api {
     replace(
       id: string,
       input: User,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<User>, File>
     ): Promise<User> {
       return apiCall(
@@ -381,8 +382,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "PUT",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -390,7 +391,7 @@ export class LiveApi implements Api {
     },
     bulkModify(
       input: MassModification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<MassModification<User>>, File>
     ): Promise<number> {
       return apiCall(
@@ -398,8 +399,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "PATCH",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -408,7 +409,7 @@ export class LiveApi implements Api {
     modifyWithDiff(
       id: string,
       input: Modification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<EntryChange<User>> {
       return apiCall(
@@ -416,8 +417,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "PATCH",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -426,7 +427,7 @@ export class LiveApi implements Api {
     modify(
       id: string,
       input: Modification<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Modification<User>>, File>
     ): Promise<User> {
       return apiCall(
@@ -434,8 +435,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "PATCH",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -443,7 +444,7 @@ export class LiveApi implements Api {
     },
     bulkDelete(
       input: Condition<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number> {
       return apiCall(
@@ -451,24 +452,24 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
       ).then((x) => x.json())
     },
-    delete(id: string, requesterToken: string): Promise<void> {
+    delete(id: string, userToken: string): Promise<void> {
       return apiCall(`${this.httpUrl}/activity-tags/rest/${id}`, undefined, {
         method: "DELETE",
-        headers: requesterToken
-          ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
           : this.extraHeaders
       }).then((x) => undefined)
     },
     count(
       input: Condition<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<Condition<User>>, File>
     ): Promise<number> {
       return apiCall(
@@ -476,8 +477,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -485,7 +486,7 @@ export class LiveApi implements Api {
     },
     groupCount(
       input: GroupCountQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<GroupCountQuery<User>>, File>
     ): Promise<Record<string, number>> {
       return apiCall(
@@ -493,8 +494,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -502,7 +503,7 @@ export class LiveApi implements Api {
     },
     aggregate(
       input: AggregateQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<AggregateQuery<User>>, File>
     ): Promise<number | null | undefined> {
       return apiCall(
@@ -510,8 +511,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
@@ -519,7 +520,7 @@ export class LiveApi implements Api {
     },
     groupAggregate(
       input: GroupAggregateQuery<User>,
-      requesterToken: string,
+      userToken: string,
       files?: Record<Path<GroupAggregateQuery<User>>, File>
     ): Promise<Record<string, number | null | undefined>> {
       return apiCall(
@@ -527,8 +528,8 @@ export class LiveApi implements Api {
         input,
         {
           method: "POST",
-          headers: requesterToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${requesterToken}`}
+          headers: userToken
+            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
             : this.extraHeaders
         },
         files
