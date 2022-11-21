@@ -12,28 +12,24 @@ import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
 import {theme} from "./theme"
 
+export interface AuthContextType {
+  session: UserSession
+  logout: () => void
+  currentUser: User
+  refreshCurrentUser: () => Promise<void>
+}
+
+export interface UnauthContextType {
+  api: Api
+  authenticate: (userToken: string) => void
+  changeBackendURL: (backendURL: string) => void
+}
+
 // AuthContext is available when the user is authenticated
-export const AuthContext = createContext({
-  session: {} as UserSession,
-  logout: (): void => {
-    throw new Error("Used logout outside of AuthContext")
-  },
-  currentUser: {} as User,
-  refreshCurrentUser: (): Promise<void> => {
-    throw new Error("Used refreshCurrentUser outside of AuthContext")
-  }
-})
+export const AuthContext = createContext({} as AuthContextType)
 
 // UnauthContext is available when the user is not authenticated (login screen)
-export const UnauthContext = createContext({
-  api: {} as Api,
-  authenticate: (userToken: string): void => {
-    throw new Error("Used authenticate outside of UnauthenticatedContext")
-  },
-  changeBackendURL: (backendURL: string): void => {
-    throw new Error("Used changeBackendURL outside of UnauthenticatedContext")
-  }
-})
+export const UnauthContext = createContext({} as UnauthContextType)
 
 const App: FC = () => {
   const {api, changeBackendURL, session, authenticate, logout} =
