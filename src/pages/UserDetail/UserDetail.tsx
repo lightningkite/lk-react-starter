@@ -9,7 +9,7 @@ import React, {FC, useContext, useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
 import {UserForm} from "./UserForm"
 
-export const UserDetail: FC = () => {
+const UserDetail: FC = () => {
   const {userId} = useParams()
   const {session, currentUser, refreshCurrentUser} = useContext(AuthContext)
 
@@ -63,3 +63,5 @@ export const UserDetail: FC = () => {
     </Container>
   )
 }
+
+export default UserDetail

@@ -1,20 +1,19 @@
-import {faker} from "@faker-js/faker"
 import {mockRestEndpointFunctions} from "@lightningkite/lightning-server-simplified"
+import {rand} from "@ngneat/falso"
 import {LocalStorageKey} from "utils/constants"
-import {generateMockDatastore} from "./mockDatastore"
+import {generateMockDatastore, MockDatastore} from "./mockDatastore"
 import {Api, EmailPinLogin, User} from "./sdk"
 
 let myUser: User | null = null
 
 export class MockApi implements Api {
+  mockDatastore: MockDatastore = generateMockDatastore()
+
   public constructor(
     public httpUrl: string = "mock",
-    public socketUrl: string = httpUrl,
-    public mockDatastore = generateMockDatastore()
+    public socketUrl: string = httpUrl
   ) {
-    if (localStorage.getItem(LocalStorageKey.USER_TOKEN)) {
-      myUser = faker.helpers.arrayElement(this.mockDatastore.users)
-    }
+    myUser = rand(this.mockDatastore.users)
   }
 
   readonly user = mockRestEndpointFunctions<User>(
@@ -32,14 +31,12 @@ export class MockApi implements Api {
     },
     emailLoginLink: async (email: string): Promise<void> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
-      myUser = faker.helpers.arrayElement(this.mockDatastore.users)
       alert(
         "You are using the mock API and will not receive an email. Refresh the page to log in."
       )
     },
     emailPINLogin: async (input: EmailPinLogin): Promise<string> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
-      myUser = faker.helpers.arrayElement(this.mockDatastore.users)
       return "mock-sso-uuid"
     }
   }

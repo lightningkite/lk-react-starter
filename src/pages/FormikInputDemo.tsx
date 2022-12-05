@@ -24,7 +24,7 @@ import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext} from "react"
 
-export const FormikInputDemo: FC = () => {
+const FormikInputDemo: FC = () => {
   const {session} = useContext(AuthContext)
 
   const formik = useFormik({
@@ -145,3 +145,5 @@ export const FormikInputDemo: FC = () => {
     </Container>
   )
 }
+
+export default FormikInputDemo

@@ -5,9 +5,9 @@ export enum DeploymentType {
 }
 
 // Load environment variables
-export const envBackendHTTP = process.env
+export const envBackendHTTP = import.meta.env
   .REACT_APP_BACKEND_HTTP_URL as DeploymentType
-export const envDeploymentType = process.env.REACT_APP_DEPLOYMENT_TYPE
+export const envDeploymentType = import.meta.env.REACT_APP_DEPLOYMENT_TYPE
 
 const consoleFormat = "color:red; font-size: 20px"
 

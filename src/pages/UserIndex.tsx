@@ -5,7 +5,7 @@ import PageHeader from "components/PageHeader"
 import React, {FC, useContext} from "react"
 import {useNavigate} from "react-router-dom"
 
-export const UserIndex: FC = () => {
+const UserIndex: FC = () => {
   const navigate = useNavigate()
   const {session} = useContext(AuthContext)
 
@@ -35,3 +35,5 @@ export const UserIndex: FC = () => {
     </Container>
   )
 }
+
+export default UserIndex

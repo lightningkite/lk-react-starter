@@ -141,98 +141,62 @@ export class UserSession {
   }
 
   readonly user = {
-    api: this.api,
-    userToken: this.userToken,
-    query(
-      input: Query<User>,
-      files?: Record<Path<Query<User>>, File>
-    ): Promise<Array<User>> {
-      return this.api.user.query(input, this.userToken, files)
+    query: (input: Query<User>): Promise<Array<User>> => {
+      return this.api.user.query(input, this.userToken)
     },
-    detail(id: string): Promise<User> {
+    detail: (id: string): Promise<User> => {
       return this.api.user.detail(id, this.userToken)
     },
-    insertBulk(
-      input: Array<User>,
-      files?: Record<Path<Array<User>>, File>
-    ): Promise<Array<User>> {
-      return this.api.user.insertBulk(input, this.userToken, files)
+    insertBulk: (input: Array<User>): Promise<Array<User>> => {
+      return this.api.user.insertBulk(input, this.userToken)
     },
-    insert(input: User, files?: Record<Path<User>, File>): Promise<User> {
-      return this.api.user.insert(input, this.userToken, files)
+    insert: (input: User): Promise<User> => {
+      return this.api.user.insert(input, this.userToken)
     },
-    upsert(
+    upsert: (id: string, input: User): Promise<User> => {
+      return this.api.user.upsert(id, input, this.userToken)
+    },
+    bulkReplace: (input: Array<User>): Promise<Array<User>> => {
+      return this.api.user.bulkReplace(input, this.userToken)
+    },
+    replace: (id: string, input: User): Promise<User> => {
+      return this.api.user.replace(id, input, this.userToken)
+    },
+    bulkModify: (input: MassModification<User>): Promise<number> => {
+      return this.api.user.bulkModify(input, this.userToken)
+    },
+    modifyWithDiff: (
       id: string,
-      input: User,
-      files?: Record<Path<User>, File>
-    ): Promise<User> {
-      return this.api.user.upsert(id, input, this.userToken, files)
+      input: Modification<User>
+    ): Promise<EntryChange<User>> => {
+      return this.api.user.modifyWithDiff(id, input, this.userToken)
     },
-    bulkReplace(
-      input: Array<User>,
-      files?: Record<Path<Array<User>>, File>
-    ): Promise<Array<User>> {
-      return this.api.user.bulkReplace(input, this.userToken, files)
+    modify: (id: string, input: Modification<User>): Promise<User> => {
+      return this.api.user.modify(id, input, this.userToken)
     },
-    replace(
-      id: string,
-      input: User,
-      files?: Record<Path<User>, File>
-    ): Promise<User> {
-      return this.api.user.replace(id, input, this.userToken, files)
+    bulkDelete: (input: Condition<User>): Promise<number> => {
+      return this.api.user.bulkDelete(input, this.userToken)
     },
-    bulkModify(
-      input: MassModification<User>,
-      files?: Record<Path<MassModification<User>>, File>
-    ): Promise<number> {
-      return this.api.user.bulkModify(input, this.userToken, files)
-    },
-    modifyWithDiff(
-      id: string,
-      input: Modification<User>,
-      files?: Record<Path<Modification<User>>, File>
-    ): Promise<EntryChange<User>> {
-      return this.api.user.modifyWithDiff(id, input, this.userToken, files)
-    },
-    modify(
-      id: string,
-      input: Modification<User>,
-      files?: Record<Path<Modification<User>>, File>
-    ): Promise<User> {
-      return this.api.user.modify(id, input, this.userToken, files)
-    },
-    bulkDelete(
-      input: Condition<User>,
-      files?: Record<Path<Condition<User>>, File>
-    ): Promise<number> {
-      return this.api.user.bulkDelete(input, this.userToken, files)
-    },
-    delete(id: string): Promise<void> {
+    delete: (id: string): Promise<void> => {
       return this.api.user.delete(id, this.userToken)
     },
-    count(
-      input: Condition<User>,
-      files?: Record<Path<Condition<User>>, File>
-    ): Promise<number> {
-      return this.api.user.count(input, this.userToken, files)
+    count: (input: Condition<User>): Promise<number> => {
+      return this.api.user.count(input, this.userToken)
     },
-    groupCount(
-      input: GroupCountQuery<User>,
-      files?: Record<Path<GroupCountQuery<User>>, File>
-    ): Promise<Record<string, number>> {
-      return this.api.user.groupCount(input, this.userToken, files)
+    groupCount: (
+      input: GroupCountQuery<User>
+    ): Promise<Record<string, number>> => {
+      return this.api.user.groupCount(input, this.userToken)
     },
-    aggregate(
-      input: AggregateQuery<User>,
-      files?: Record<Path<AggregateQuery<User>>, File>
-    ): Promise<number | null | undefined> {
-      return this.api.user.aggregate(input, this.userToken, files)
+    aggregate: (
+      input: AggregateQuery<User>
+    ): Promise<number | null | undefined> => {
+      return this.api.user.aggregate(input, this.userToken)
     },
-    groupAggregate(
-      input: GroupAggregateQuery<User>,
-      files?: Record<Path<GroupAggregateQuery<User>>, File>
-    ): Promise<Record<string, number | null | undefined>> {
-      return this.api.user.groupAggregate(input, this.userToken, files)
+    groupAggregate: (
+      input: GroupAggregateQuery<User>
+    ): Promise<Record<string, number | null | undefined>> => {
+      return this.api.user.groupAggregate(input, this.userToken)
     }
   }
 }
@@ -274,266 +238,162 @@ export class LiveApi implements Api {
   }
 
   readonly user = {
-    httpUrl: this.httpUrl,
-    socketUrl: this.socketUrl,
-    extraHeaders: this.extraHeaders,
-    query(
-      input: Query<User>,
-      userToken: string,
-      files?: Record<Path<Query<User>>, File>
-    ): Promise<Array<User>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/query`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+    query: (input: Query<User>, userToken?: string): Promise<Array<User>> => {
+      return apiCall(`${this.httpUrl}/user/rest/query`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    detail(id: string, userToken: string): Promise<User> {
-      return apiCall(`${this.httpUrl}/activity-tags/rest/${id}`, undefined, {
+    detail: (id: string, userToken?: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}`, undefined, {
         method: "GET",
         headers: userToken
           ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
           : this.extraHeaders
       }).then((x) => x.json())
     },
-    insertBulk(
+    insertBulk: (
       input: Array<User>,
-      userToken: string,
-      files?: Record<Path<Array<User>>, File>
-    ): Promise<Array<User>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/bulk`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<Array<User>> => {
+      return apiCall(`${this.httpUrl}/user/rest/bulk`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    insert(
-      input: User,
-      userToken: string,
-      files?: Record<Path<User>, File>
-    ): Promise<User> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+    insert: (input: User, userToken?: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    upsert(
-      id: string,
-      input: User,
-      userToken: string,
-      files?: Record<Path<User>, File>
-    ): Promise<User> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/${id}`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+    upsert: (id: string, input: User, userToken?: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    bulkReplace(
+    bulkReplace: (
       input: Array<User>,
-      userToken: string,
-      files?: Record<Path<Array<User>>, File>
-    ): Promise<Array<User>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest`,
-        input,
-        {
-          method: "PUT",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<Array<User>> => {
+      return apiCall(`${this.httpUrl}/user/rest`, input, {
+        method: "PUT",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    replace(
-      id: string,
-      input: User,
-      userToken: string,
-      files?: Record<Path<User>, File>
-    ): Promise<User> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/${id}`,
-        input,
-        {
-          method: "PUT",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+    replace: (id: string, input: User, userToken?: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}`, input, {
+        method: "PUT",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    bulkModify(
+    bulkModify: (
       input: MassModification<User>,
-      userToken: string,
-      files?: Record<Path<MassModification<User>>, File>
-    ): Promise<number> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/bulk`,
-        input,
-        {
-          method: "PATCH",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<number> => {
+      return apiCall(`${this.httpUrl}/user/rest/bulk`, input, {
+        method: "PATCH",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    modifyWithDiff(
+    modifyWithDiff: (
       id: string,
       input: Modification<User>,
-      userToken: string,
-      files?: Record<Path<Modification<User>>, File>
-    ): Promise<EntryChange<User>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/${id}/delta`,
-        input,
-        {
-          method: "PATCH",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<EntryChange<User>> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}/delta`, input, {
+        method: "PATCH",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    modify(
+    modify: (
       id: string,
       input: Modification<User>,
-      userToken: string,
-      files?: Record<Path<Modification<User>>, File>
-    ): Promise<User> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/${id}`,
-        input,
-        {
-          method: "PATCH",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}`, input, {
+        method: "PATCH",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    bulkDelete(
+    bulkDelete: (
       input: Condition<User>,
-      userToken: string,
-      files?: Record<Path<Condition<User>>, File>
-    ): Promise<number> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/bulk-delete`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<number> => {
+      return apiCall(`${this.httpUrl}/user/rest/bulk-delete`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    delete(id: string, userToken: string): Promise<void> {
-      return apiCall(`${this.httpUrl}/activity-tags/rest/${id}`, undefined, {
+    delete: (id: string, userToken?: string): Promise<void> => {
+      return apiCall(`${this.httpUrl}/user/rest/${id}`, undefined, {
         method: "DELETE",
         headers: userToken
           ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
           : this.extraHeaders
-      }).then((x) => undefined)
+      }).then((_x) => undefined)
     },
-    count(
-      input: Condition<User>,
-      userToken: string,
-      files?: Record<Path<Condition<User>>, File>
-    ): Promise<number> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/count`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+    count: (input: Condition<User>, userToken?: string): Promise<number> => {
+      return apiCall(`${this.httpUrl}/user/rest/count`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    groupCount(
+    groupCount: (
       input: GroupCountQuery<User>,
-      userToken: string,
-      files?: Record<Path<GroupCountQuery<User>>, File>
-    ): Promise<Record<string, number>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/group-count`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<Record<string, number>> => {
+      return apiCall(`${this.httpUrl}/user/rest/group-count`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    aggregate(
+    aggregate: (
       input: AggregateQuery<User>,
-      userToken: string,
-      files?: Record<Path<AggregateQuery<User>>, File>
-    ): Promise<number | null | undefined> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/aggregate`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<number | null | undefined> => {
+      return apiCall(`${this.httpUrl}/user/rest/aggregate`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     },
-    groupAggregate(
+    groupAggregate: (
       input: GroupAggregateQuery<User>,
-      userToken: string,
-      files?: Record<Path<GroupAggregateQuery<User>>, File>
-    ): Promise<Record<string, number | null | undefined>> {
-      return apiCall(
-        `${this.httpUrl}/activity-tags/rest/group-aggregate`,
-        input,
-        {
-          method: "POST",
-          headers: userToken
-            ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
-            : this.extraHeaders
-        },
-        files
-      ).then((x) => x.json())
+      userToken?: string
+    ): Promise<Record<string, number | null | undefined>> => {
+      return apiCall(`${this.httpUrl}/user/rest/group-aggregate`, input, {
+        method: "POST",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
     }
   }
 }
