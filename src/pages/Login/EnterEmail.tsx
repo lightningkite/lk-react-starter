@@ -48,13 +48,19 @@ const EnterEmail: FC<EnterEmailProps> = (props) => {
   }
 
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit()
+      }}
+    >
       <Typography variant="h1" textAlign="center">
         React App Starter
       </Typography>
       <Typography variant="subtitle1" lineHeight={1.2} mt={3}>
         We&apos;ll send you a code to sign in and get started!
       </Typography>
+
       <Stack spacing={4} mt={4}>
         <TextField
           label="Email"
@@ -62,6 +68,7 @@ const EnterEmail: FC<EnterEmailProps> = (props) => {
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           fullWidth
+          autoFocus
         />
 
         {!!error && <Alert severity="error">{error}</Alert>}
@@ -71,12 +78,12 @@ const EnterEmail: FC<EnterEmailProps> = (props) => {
           color="primary"
           fullWidth
           loading={submitting}
-          onClick={onSubmit}
+          type="submit"
         >
           Send Code
         </LoadingButton>
       </Stack>
-    </>
+    </form>
   )
 }
 

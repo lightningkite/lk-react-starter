@@ -24,8 +24,28 @@ const EnterPin: FC<EnterPinProps> = (props) => {
     }
   }, [pin])
 
+  const onSubmit = () => {
+    setSubmitting(true)
+    setError("")
+    api.auth
+      .emailPINLogin({
+        email,
+        pin
+      })
+      .then((token) => {
+        authenticate(token)
+      })
+      .catch(() => setError("Failed to sign-in using the pin"))
+      .finally(() => setSubmitting(false))
+  }
+
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit()
+      }}
+    >
       <Typography variant="h1">Pin Sent!</Typography>
       <Typography variant="subtitle1" mt={3} lineHeight={1.2}>
         Enter the 6-digit pin that has been sent to &quot;
@@ -33,6 +53,7 @@ const EnterPin: FC<EnterPinProps> = (props) => {
       </Typography>
 
       <TextField
+        autoFocus
         value={pin}
         onChange={(e) => setPin(e.target.value)}
         fullWidth
@@ -51,20 +72,7 @@ const EnterPin: FC<EnterPinProps> = (props) => {
         disabled={pin.length < 6}
         fullWidth
         ref={submitPinButton}
-        onClick={() => {
-          setSubmitting(true)
-          setError("")
-          api.auth
-            .emailPINLogin({
-              email,
-              pin
-            })
-            .then((token) => {
-              authenticate(token)
-            })
-            .catch(() => setError("Failed to sign-in using the pin"))
-            .finally(() => setSubmitting(false))
-        }}
+        type="submit"
       >
         Submit
       </LoadingButton>
@@ -72,7 +80,7 @@ const EnterPin: FC<EnterPinProps> = (props) => {
       <Button onClick={() => window.location.reload()} fullWidth sx={{mt: 1}}>
         Try Again
       </Button>
-    </>
+    </form>
   )
 }
 
