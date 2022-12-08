@@ -16,21 +16,25 @@ import {LiveApi} from "api/sdk"
 import {backendURLOptions} from "api/useSessionManager"
 import {UnauthContext} from "App"
 import React, {FC, useContext} from "react"
-import {envBackendHTTP} from "utils/helpers/envHelpers"
+
+export const DEVELOPER_SECRET_CODE = "info@lightningkite.com"
+
+const envBackendURL = import.meta.env.VITE_BACKEND_HTTP_URL
 
 const DeveloperOptions: FC = () => {
   const {changeBackendURL, api} = useContext(UnauthContext)
 
   const selectedBackendURL = (api as LiveApi | MockApi).httpUrl
-  const isUsingCustomBackendURL = selectedBackendURL !== envBackendHTTP
+  const isUsingCustomBackendURL = selectedBackendURL !== envBackendURL
 
   return (
     <Box sx={{textAlign: "left"}}>
       <Divider sx={{my: 2}} />
       <Typography variant="h6">Developer Settings</Typography>
       <Typography variant="subtitle2" lineHeight={1.2}>
-        These options will not be shown by default on production or staging
-        deployments
+        These options are only shown by default in local development. To show
+        this in production, enter the secret code in the email field:{" "}
+        <u>{DEVELOPER_SECRET_CODE}</u>
       </Typography>
 
       {isUsingCustomBackendURL && (
@@ -57,7 +61,7 @@ const DeveloperOptions: FC = () => {
                 <Stack>
                   <Typography fontWeight="bold" lineHeight={1}>
                     {option.label}
-                    {option.url === envBackendHTTP && " *"}
+                    {option.url === envBackendURL && " *"}
                   </Typography>
                   <Typography variant="body2" lineHeight={1} mt="5px">
                     {option.url}

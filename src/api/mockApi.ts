@@ -23,20 +23,24 @@ export class MockApi implements Api {
 
   readonly auth = {
     refreshToken: async (): Promise<string> => {
+      console.log("refreshToken")
       return "mock-refresh-token"
     },
     getSelf: (userToken: string): Promise<User> => {
       if (!myUser) return Promise.reject()
+      console.log("getSelf", myUser)
       return Promise.resolve(myUser)
     },
     emailLoginLink: async (email: string): Promise<void> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
+      console.log("emailLoginLink")
       alert(
         "You are using the mock API and will not receive an email. Refresh the page to log in."
       )
     },
     emailPINLogin: async (input: EmailPinLogin): Promise<string> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
+      console.log("emailPINLogin", {input})
       return "mock-sso-uuid"
     }
   }

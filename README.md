@@ -2,6 +2,7 @@
 
 The purpose of this project is to be a starting point for new React apps that use Lightning Server as the backend. It is already set up with many packages and components that will be used in almost all projects including:
 
+- Module bundling and local development with Vite
 - Authentication
 - Ability to switch which backend deployment is used from the login screen
 - Mock API for local development without running the backend
@@ -12,6 +13,7 @@ The purpose of this project is to be a starting point for new React apps that us
 
 Documentation for included packages:
 
+- [Vite](https://vitejs.dev/)
 - [MUI Lightning Components](https://www.npmjs.com/package/@lightningkite/mui-lightning-components)
 - [React MUI basic components](https://mui.com/material-ui/getting-started/overview/)
 - React MUI-X [date pickers](https://mui.com/x/react-date-pickers/getting-started/) and [data grid](https://mui.com/x/react-data-grid/)
@@ -30,45 +32,24 @@ To avoid conflicting localStorage keys with other projects you're developing loc
 
 This project is compatible with node version 16 (LTS).
 
-NVM is recommended for easily manage installed node versions. Install nvm using this guide: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm).
+NVM is recommended to easily manage installed node versions. Install nvm using this guide: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm).
 
 ```bash
 nvm install 16
 nvm use 16
 ```
 
-## Configure Environment Variables
+## Environment Variables
 
-Create a new `.env` file using the example. Errors will be logged to the console if the correct env variables do not exist.
+_Read more about environment variables and deployment modes in Vite:_ [https://vitejs.dev/guide/env-and-mode.html](https://vitejs.dev/guide/env-and-mode.html)
 
-**REACT_APP_BACKEND_HTTP_URL** is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
+Vite uses dotenv to load environment variables. Values in `.env.production` will override those in `.env` when doing a production build.
 
-**REACT_APP_DEPLOYMENT_TYPE** can be set to `local`, `staging`, or `production`.
+**VITE_BACKEND_HTTP_URL** is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
 
-If you need to use different deployment type options, you will also need to update the options in `src/utils/helpers/envHelpers.ts`. This file also exports typed variables for all of the env variables so that they can be used safely in typescript.
+To access an environment variable at runtime, use `import.meta.env.VITE_MY_VARIABLE`. To determine if the application is running in development or production mode, use `import.meta.env.DEV` or `import.meta.env.PROD` respectively (both are boolean values).
 
-```bash
-cp ".env.example" ".env"
-```
-
-```
-// .env
-
-REACT_APP_BACKEND_HTTP_URL=mock
-
-# Set to local, dev, staging, or production
-REACT_APP_DEPLOYMENT_TYPE=local
-```
-
-```typescript
-// src/utils/helpers/envHelpers.ts
-
-export enum DeploymentType {
-  LOCAL = "local",
-  STAGING = "staging",
-  PRODUCTION = "production"
-}
-```
+If you add additional environment variables, you can specify their types in `/src/env.d.ts`. Prefix all env variables with `VITE_` to include them in the client bundle.
 
 ## Lightning Server SDK & Mock Data
 
@@ -135,10 +116,12 @@ This is a catch-all directory for utility functions, models, hooks, helpers, or 
 
 ## Deployment
 
-Before deploying, remember to update the following app information in the `public` directory:
+Before deploying, remember to update the following app information:
 
-- Upload a new favicon and add other app icons, update these in `manifest.json`
-- Update site metadata in `manifest.json`. See [https://developer.mozilla.org/en-US/docs/Web/Manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest).
-- Update meta tags in `index.html`
+- Upload a new favicon
+- Update meta tags in `/index.html`
+- Set correct environment variables in `.env.production` (See the "Environment Variables" section above)
 
-To create a production build, run `npm run build`.
+To create a production build with Vite, run `npm run build`. To serve the production build locally, run `npm run serve`.
+
+This project has been set up with `rollup-plugin-analyzer` to show you the final bundle sizes. Use code splitting in React in appropriate places to reduce the bundle size if needed. See an example of this in `AuthRoutes.tsx`.

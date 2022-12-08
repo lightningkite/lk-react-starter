@@ -43,6 +43,7 @@ export interface Api {
   }
 
   readonly user: {
+    default(): Promise<User>
     query(
       input: Query<User>,
       userToken: string,
@@ -141,6 +142,7 @@ export class UserSession {
   }
 
   readonly user = {
+    default: (): Promise<User> => Promise.reject(new Error("Not implemented")),
     query: (input: Query<User>): Promise<Array<User>> => {
       return this.api.user.query(input, this.userToken)
     },
@@ -238,6 +240,14 @@ export class LiveApi implements Api {
   }
 
   readonly user = {
+    default: (userToken?: string): Promise<User> => {
+      return apiCall(`${this.httpUrl}/user/rest/default`, undefined, {
+        method: "GET",
+        headers: userToken
+          ? {...this.extraHeaders, Authorization: `Bearer ${userToken}`}
+          : this.extraHeaders
+      }).then((x) => x.json())
+    },
     query: (input: Query<User>, userToken?: string): Promise<Array<User>> => {
       return apiCall(`${this.httpUrl}/user/rest/query`, input, {
         method: "POST",

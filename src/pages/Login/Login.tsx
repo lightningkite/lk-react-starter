@@ -2,12 +2,7 @@ import {MockApi} from "api/mockApi"
 import {LiveApi} from "api/sdk"
 import {UnauthContext} from "App"
 import React, {FC, useContext, useEffect, useState} from "react"
-import {
-  DeploymentType,
-  envBackendHTTP,
-  envDeploymentType
-} from "utils/helpers/envHelpers"
-import DeveloperOptions from "./DeveloperOptions"
+import DeveloperOptions, {DEVELOPER_SECRET_CODE} from "./DeveloperOptions"
 import EnterEmail from "./EnterEmail"
 import EnterPin from "./EnterPin"
 
@@ -15,13 +10,15 @@ export const Login: FC = () => {
   const {api} = useContext(UnauthContext)
 
   const selectedBackendURL = (api as LiveApi | MockApi).httpUrl
-  const isUsingCustomBackendURL = selectedBackendURL !== envBackendHTTP
+  const isUsingCustomBackendURL =
+    selectedBackendURL !== import.meta.env.VITE_BACKEND_HTTP_URL
 
   const [isEmailSent, setIsEmailSent] = useState(false)
   const [email, setEmail] = useState("")
-  // Show extra developer options for switching the backend URL
+
+  // Show extra developer options if in local development or if using a custom backend URL
   const [showDeveloperSettings, setShowDeveloperSettings] = useState(
-    isUsingCustomBackendURL || envDeploymentType === DeploymentType.LOCAL
+    isUsingCustomBackendURL || import.meta.env.DEV
   )
 
   const sendEmail = () =>
@@ -29,7 +26,7 @@ export const Login: FC = () => {
 
   useEffect(() => {
     // If the user enters this secret code, force the developer settings to show (even on production)
-    if (email === "info@lightningkite.com") {
+    if (email === DEVELOPER_SECRET_CODE) {
       setShowDeveloperSettings(true)
     }
   }, [email])

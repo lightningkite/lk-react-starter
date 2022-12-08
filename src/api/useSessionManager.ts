@@ -1,6 +1,5 @@
 import {useState} from "react"
 import {LocalStorageKey} from "utils/constants"
-import {envBackendHTTP} from "utils/helpers/envHelpers"
 import {MockApi} from "./mockApi"
 import {Api, LiveApi, UserSession} from "./sdk"
 
@@ -20,11 +19,10 @@ export const backendURLOptions: URLOption[] = [
   }
 ]
 
-if (
-  envBackendHTTP &&
-  !backendURLOptions.some((o) => o.url === envBackendHTTP)
-) {
-  backendURLOptions.push({label: "Custom Env Default", url: envBackendHTTP})
+const envBackendURL = import.meta.env.VITE_BACKEND_HTTP_URL
+
+if (envBackendURL && !backendURLOptions.some((o) => o.url === envBackendURL)) {
+  backendURLOptions.push({label: "Custom Env Default", url: envBackendURL})
 }
 
 export const useSessionManager = (): {
@@ -40,7 +38,7 @@ export const useSessionManager = (): {
     )
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const initialBackendURL = localStorageBackendURL || envBackendHTTP || "mock"
+    const initialBackendURL = localStorageBackendURL || envBackendURL || "mock"
 
     if (localStorageBackendURL !== initialBackendURL) {
       localStorage.setItem(LocalStorageKey.BACKEND_URL, initialBackendURL)
