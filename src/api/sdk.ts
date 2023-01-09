@@ -19,7 +19,7 @@ export interface User {
   email: string
   phone: string
   birthday: string
-  profilePic: string
+  profilePic?: string
   createdAt: string
   modifiedAt: string
 }
