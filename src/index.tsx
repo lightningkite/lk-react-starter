@@ -16,7 +16,7 @@ const consoleFormat = "color:red; font-size: 20px"
 if (!import.meta.env.VITE_BACKEND_HTTP_URL)
   console.log("%cVITE_BACKEND_HTTP_URL is not set", consoleFormat)
 
-console.log("Available ENV Variables", import.meta.env)
+import.meta.env.DEV && console.log("Available ENV Variables", import.meta.env)
 
 const root = createRoot(document.getElementById("root") as HTMLElement)
 
