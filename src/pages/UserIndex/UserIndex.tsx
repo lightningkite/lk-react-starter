@@ -15,7 +15,9 @@ export const UserIndex: FC = () => {
   return (
     <Container maxWidth="md">
       <PageHeader title="Users List">
-        <AddUserButton onSubmit={() => setRefreshTrigger((prev) => prev + 1)} />
+        <AddUserButton
+          afterSubmit={() => setRefreshTrigger((prev) => prev + 1)}
+        />
       </PageHeader>
 
       <RestDataTable

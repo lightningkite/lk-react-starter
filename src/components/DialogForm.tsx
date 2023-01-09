@@ -22,7 +22,6 @@ export interface DialogFormProps extends DialogProps {
   instructions?: string
   onClose: () => void
   onSubmit: () => Promise<void>
-  errorMessage?: string
   disableSubmitBtn?: boolean
 }
 
@@ -37,28 +36,27 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
     onSubmit,
     disableSubmitBtn = false,
     onClose,
-    errorMessage,
     ...rest
   } = props
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [didError, setDidError] = useState(false)
+  const [error, setError] = useState("")
 
   const handleClose = () => {
-    setDidError(false)
+    setError("")
     setIsSubmitting(false)
     onClose()
   }
 
   const handleOnSubmit = () => {
-    setDidError(false)
+    setError("")
     setIsSubmitting(true)
 
     onSubmit()
       .then(onClose)
       .catch((e) => {
         console.error(e)
-        setDidError(true)
+        setError(e?.message || "Error submitting")
       })
       .finally(() => setIsSubmitting(false))
   }
@@ -101,10 +99,7 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
 
           <Box my={2}>{children}</Box>
 
-          {(didError || errorMessage) && (
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            <Alert severity="error">{errorMessage || "Error submitting"}</Alert>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
         </DialogContent>
 
         <DialogActions>

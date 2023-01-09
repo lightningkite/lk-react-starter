@@ -16,7 +16,7 @@ import * as yup from "yup"
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  email: yup.string().required("Email is required"),
+  email: yup.string().email().required("Email is required"),
   phone: yup.string().required("Phone is required"),
   birthday: yup.string().required("Birthday is required")
 })

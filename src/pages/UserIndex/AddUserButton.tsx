@@ -15,19 +15,24 @@ import * as yup from "yup"
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  email: yup.string().required("Email is required"),
+  email: yup.string().email().required("Email is required"),
   phone: yup.string().required("Phone is required"),
   birthday: yup.string().required("Birthday is required")
 })
 
 export interface AddUserProps {
-  onSubmit: () => void
+  afterSubmit: () => void
 }
 
 export const AddUserButton: FC<AddUserProps> = (props) => {
   const {session} = useContext(AuthContext)
 
   const [showCreateForm, setShowCreateForm] = useState(false)
+
+  function onClose() {
+    setShowCreateForm(false)
+    formik.resetForm()
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -46,8 +51,8 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
         modifiedAt: new Date().toISOString()
       })
 
-      setShowCreateForm(false)
-      props.onSubmit()
+      props.afterSubmit()
+      onClose()
     }
   })
 
@@ -60,14 +65,13 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
       <DialogForm
         title="New User"
         open={showCreateForm}
-        onClose={() => setShowCreateForm(false)}
-        onSubmit={() =>
-          formik.submitForm().then(() => {
-            if (!formik.isValid) {
-              return Promise.reject()
-            }
-          })
-        }
+        onClose={onClose}
+        onSubmit={async () => {
+          await formik.submitForm()
+          if (!formik.isValid || !formik.submitCount) {
+            throw new Error("Please fix the errors above.")
+          }
+        }}
       >
         <Stack gap={3}>
           <TextField
