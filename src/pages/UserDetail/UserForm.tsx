@@ -23,13 +23,13 @@ const validationSchema = yup.object().shape({
 
 export interface UserFormProps {
   user: User
-  refreshUser: () => Promise<void>
+  setUser: (user: User) => void
 }
 
 export const UserForm: FC<UserFormProps> = (props) => {
-  const {user, refreshUser} = props
+  const {user, setUser} = props
 
-  const {session} = useContext(AuthContext)
+  const {session, currentUser, setCurrentUser} = useContext(AuthContext)
 
   const [error, setError] = useState("")
 
@@ -61,8 +61,12 @@ export const UserForm: FC<UserFormProps> = (props) => {
       }
 
       try {
-        await session.user.modify(user._id, modification)
-        await refreshUser()
+        const updatedUser = await session.user.modify(user._id, modification)
+        setUser(updatedUser)
+
+        if (currentUser._id === user._id) {
+          setCurrentUser(updatedUser)
+        }
       } catch {
         setError("Error updating user")
       }

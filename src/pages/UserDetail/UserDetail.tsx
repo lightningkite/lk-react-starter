@@ -11,26 +11,15 @@ import {UserForm} from "./UserForm"
 
 const UserDetail: FC = () => {
   const {userId} = useParams()
-  const {session, currentUser, refreshCurrentUser} = useContext(AuthContext)
+  const {session} = useContext(AuthContext)
 
   const [user, setUser] = useState<User | null>()
 
-  const refreshUser = async () => {
-    // If the current user is editing their own profile, refresh the current user
-    if (user?._id === currentUser._id) {
-      refreshCurrentUser()
-    }
-
-    try {
-      const newUser = await session.user.detail(userId as string)
-      setUser(newUser)
-    } catch {
-      setUser(null)
-    }
-  }
-
   useEffect(() => {
-    refreshUser()
+    session.user
+      .detail(userId as string)
+      .then(setUser)
+      .catch(() => setUser(null))
   }, [userId])
 
   if (user === undefined) {
@@ -57,7 +46,7 @@ const UserDetail: FC = () => {
 
       <Card>
         <CardContent sx={{mt: 2}}>
-          <UserForm user={user} refreshUser={refreshUser} />
+          <UserForm user={user} setUser={setUser} />
         </CardContent>
       </Card>
     </Container>

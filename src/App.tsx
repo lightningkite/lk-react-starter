@@ -16,7 +16,7 @@ export interface AuthContextType {
   session: UserSession
   logout: () => void
   currentUser: User
-  refreshCurrentUser: () => Promise<void>
+  setCurrentUser: (newCurrentUser: User) => void
 }
 
 export interface UnauthContextType {
@@ -39,18 +39,15 @@ const App: FC = () => {
 
   const isLoggedIn = !!session
 
-  const refreshCurrentUser = async (): Promise<void> => {
+  useEffect(() => {
     if (!session) {
       setCurrentUser(undefined)
     }
-    await session?.auth
+
+    session?.auth
       .getSelf()
       .then(setCurrentUser)
       .catch(() => setCurrentUser(null))
-  }
-
-  useEffect(() => {
-    refreshCurrentUser()
   }, [isLoggedIn])
 
   if (isLoggedIn && currentUser === undefined) {
@@ -67,7 +64,7 @@ const App: FC = () => {
         <ThemeProvider theme={theme}>
           {session && currentUser ? (
             <AuthContext.Provider
-              value={{session, logout, currentUser, refreshCurrentUser}}
+              value={{session, logout, currentUser, setCurrentUser}}
             >
               <MainLayout>
                 <AuthRoutes />
