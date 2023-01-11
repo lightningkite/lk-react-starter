@@ -13,7 +13,7 @@ const UnauthLayout: FC<{children: ReactNode}> = ({children}) => {
     >
       <Container maxWidth="xs">
         <Card>
-          <CardContent sx={{maxHeight: "80vh", overflowY: "scroll"}}>
+          <CardContent sx={{maxHeight: "80vh", overflowY: "auto"}}>
             {children}
           </CardContent>
         </Card>
