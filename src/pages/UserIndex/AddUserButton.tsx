@@ -10,14 +10,15 @@ import DialogForm from "components/DialogForm"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useState} from "react"
+import {dateToISO} from "utils/helpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
 const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email().required("Email is required"),
-  phone: yup.string().required("Phone is required"),
-  birthday: yup.string().required("Birthday is required")
+  name: yup.string().required("Required"),
+  email: yup.string().email().required("Required"),
+  phone: yup.string().required("Required"),
+  birthday: yup.string().required("Required").nullable()
 })
 
 export interface AddUserProps {
@@ -46,9 +47,9 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
       await session.user.insert({
         ...values,
         _id: crypto.randomUUID(),
-        birthday: (values.birthday as Date).toISOString().split("T")[0],
-        createdAt: new Date().toISOString(),
-        modifiedAt: new Date().toISOString()
+        birthday: dateToISO(values.birthday as Date),
+        createdAt: dateToISO(new Date()),
+        modifiedAt: dateToISO(new Date())
       })
 
       props.afterSubmit()

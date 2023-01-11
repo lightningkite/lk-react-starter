@@ -7,6 +7,7 @@ import {
   randUuid
 } from "@ngneat/falso"
 import {User} from "api/sdk"
+import {dateToISO} from "utils/helpers"
 
 export function generateUsers(total: number): User[] {
   return Array.from({length: total}, () => ({
@@ -14,9 +15,9 @@ export function generateUsers(total: number): User[] {
     name: randFullName(),
     email: randEmail(),
     phone: randPhoneNumber(),
-    birthday: randPastDate({years: 100}).toISOString(),
+    birthday: dateToISO(randPastDate({years: 100})),
     profilePic: randAvatar(),
-    createdAt: randPastDate().toISOString(),
-    modifiedAt: randPastDate().toISOString()
+    createdAt: dateToISO(randPastDate()),
+    modifiedAt: dateToISO(randPastDate())
   }))
 }

@@ -11,6 +11,7 @@ import {AuthContext} from "App"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useEffect, useState} from "react"
+import {dateFromISO, dateToISO} from "utils/helpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
@@ -39,7 +40,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      birthday: new Date(user.birthday)
+      birthday: dateFromISO(user.birthday)
     },
     validationSchema,
     // When the form is submitted, this function is called if the form values are valid
@@ -49,7 +50,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       // Convert date fields from Date back to ISO string
       const formattedValues = {
         ...values,
-        birthday: values.birthday.toISOString().split("T")[0]
+        birthday: dateToISO(values.birthday)
       }
 
       // Automatically builds the Lightning Server modification given the old object and the new values
@@ -76,7 +77,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
   // Reset the form when the user changes or refreshes
   useEffect(() => {
     // Dates are stored as ISO strings in the database, so we need to convert them to Date objects
-    formik.resetForm({values: {...user, birthday: new Date(user.birthday)}})
+    formik.resetForm({values: {...user, birthday: dateFromISO(user.birthday)}})
   }, [user])
 
   return (
