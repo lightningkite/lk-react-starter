@@ -43,7 +43,7 @@ nvm use 16
 
 _Read more about environment variables and deployment modes in Vite:_ [https://vitejs.dev/guide/env-and-mode.html](https://vitejs.dev/guide/env-and-mode.html)
 
-Vite uses dotenv to load environment variables. Values in `.env.production` will override those in `.env` when doing a production build.
+Vite uses dotenv to load environment variables. Values in `.env.production` or `.env.staging` will override those in `.env` when doing a production build.
 
 **VITE_BACKEND_HTTP_URL** is the default backend URL for the deployment. The actual backend URL being used can still be customized using the developer options on the login screen
 
@@ -122,6 +122,6 @@ Before deploying, remember to update the following app information:
 - Update meta tags in `/index.html`
 - Set correct environment variables in `.env.production` (See the "Environment Variables" section above)
 
-To create a production build with Vite, run `npm run build`. To serve the production build locally, run `npm run serve`.
+To create a production build with Vite, run `npm run build:stage` or `npm run build:prod`. To serve the build locally, run `npm run serve`.
 
 This project has been set up with `rollup-plugin-analyzer` to show you the final bundle sizes. Use code splitting in React in appropriate places to reduce the bundle size if needed. See an example of this in `AuthRoutes.tsx`.
