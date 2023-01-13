@@ -18,7 +18,7 @@ const validationSchema = yup.object().shape({
   name: yup.string().required("Required"),
   email: yup.string().email().required("Required"),
   phone: yup.string().required("Required"),
-  birthday: yup.string().required("Required").nullable()
+  birthday: yup.date().required("Required").nullable()
 })
 
 export interface AddUserProps {

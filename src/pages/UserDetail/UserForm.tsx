@@ -36,12 +36,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
 
   // Formik is a library for managing form state. See: https://formik.org/docs/overview
   const formik = useFormik({
-    initialValues: {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      birthday: dateFromISO(user.birthday)
-    },
+    initialValues: userToFormikValues(user),
     validationSchema,
     // When the form is submitted, this function is called if the form values are valid
     onSubmit: async (values) => {
@@ -77,7 +72,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
   // Reset the form when the user changes or refreshes
   useEffect(() => {
     // Dates are stored as ISO strings in the database, so we need to convert them to Date objects
-    formik.resetForm({values: {...user, birthday: dateFromISO(user.birthday)}})
+    formik.resetForm({values: userToFormikValues(user)})
   }, [user])
 
   return (
@@ -108,4 +103,13 @@ export const UserForm: FC<UserFormProps> = (props) => {
       </LoadingButton>
     </Stack>
   )
+}
+
+function userToFormikValues(user: User) {
+  return {
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    birthday: dateFromISO(user.birthday)
+  }
 }

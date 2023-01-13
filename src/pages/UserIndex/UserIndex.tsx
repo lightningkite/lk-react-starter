@@ -4,6 +4,7 @@ import {AuthContext} from "App"
 import PageHeader from "components/PageHeader"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
+import {dateFromISO} from "utils/helpers"
 import {AddUserButton} from "./AddUserButton"
 
 export const UserIndex: FC = () => {
@@ -33,7 +34,7 @@ export const UserIndex: FC = () => {
             headerName: "Last Modified",
             width: 120,
             type: "date",
-            valueGetter: ({value}) => new Date(value),
+            valueGetter: ({value}) => dateFromISO(value),
             valueFormatter: ({value}) => value.toLocaleDateString()
           }
         ]}
