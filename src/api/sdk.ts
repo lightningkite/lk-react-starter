@@ -29,6 +29,32 @@ export interface EmailPinLogin {
   pin: string
 }
 
+export interface HealthStatus {
+  level: Level
+  checkedAt: string
+  additionalMessage: string | null | undefined
+}
+export enum Level {
+  OK = "OK",
+  WARNING = "WARNING",
+  URGENT = "URGENT",
+  ERROR = "ERROR"
+}
+export interface Memory {
+  max: number
+  total: number
+  free: number
+  systemAllocated: number
+  usage: number
+}
+export interface ServerHealth {
+  serverId: string
+  version: string
+  memory: Memory
+  features: Record<string, HealthStatus>
+  loadAverageCpu: number
+}
+
 export interface UploadInformation {
   uploadUrl: string
   futureCallToken: string
