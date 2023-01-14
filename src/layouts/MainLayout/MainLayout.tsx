@@ -10,16 +10,21 @@ const navItems: Array<{label: string; to: string}> = [
   {label: "Formik Input Demo", to: "/input-demo"}
 ]
 
+const SIDEBAR_WIDTH = "17rem"
+
 const MainLayout: FC<{children: ReactNode}> = ({children}) => {
   return (
-    <Stack direction="row" minHeight="100vh">
+    <>
       <Box
         sx={{
           p: 1,
-          zIndex: 1,
+          zIndex: 100,
           backgroundColor: "white",
-          width: "20rem",
-          boxShadow: "0 3px 6px rgba(0,0,0,0.16)"
+          width: SIDEBAR_WIDTH,
+          boxShadow: "0 3px 6px rgba(0,0,0,0.16)",
+          position: "fixed",
+          height: "100vh",
+          overflowY: "auto"
         }}
       >
         <MyUserMenu />
@@ -45,10 +50,16 @@ const MainLayout: FC<{children: ReactNode}> = ({children}) => {
           ))}
         </Stack>
       </Box>
-      <Box bgcolor="background.default" width="100%" pt={3} pb={7}>
+      <Box
+        bgcolor="background.default"
+        pt={3}
+        pb={7}
+        pl={SIDEBAR_WIDTH}
+        minHeight="100vh"
+      >
         {children}
       </Box>
-    </Stack>
+    </>
   )
 }
 
