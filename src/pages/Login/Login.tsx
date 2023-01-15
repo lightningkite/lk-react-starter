@@ -1,6 +1,6 @@
 import {MockApi} from "api/mockApi"
 import {LiveApi} from "api/sdk"
-import {UnauthContext} from "App"
+import {UnauthContext} from "utils/context"
 import React, {FC, useContext, useEffect, useState} from "react"
 import DeveloperOptions, {DEVELOPER_SECRET_CODE} from "./DeveloperOptions"
 import EnterEmail from "./EnterEmail"

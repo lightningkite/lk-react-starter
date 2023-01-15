@@ -1,6 +1,6 @@
 import {RestDataTable} from "@lightningkite/mui-lightning-components"
 import {Container} from "@mui/material"
-import {AuthContext} from "App"
+import {AuthContext} from "utils/context"
 import PageHeader from "components/PageHeader"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"

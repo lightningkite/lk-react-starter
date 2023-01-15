@@ -14,7 +14,7 @@ import {
 import {MockApi} from "api/mockApi"
 import {LiveApi} from "api/sdk"
 import {backendURLOptions} from "api/useSessionManager"
-import {UnauthContext} from "App"
+import {UnauthContext} from "utils/context"
 import React, {FC, useContext} from "react"
 
 export const DEVELOPER_SECRET_CODE = "info@lightningkite.com"

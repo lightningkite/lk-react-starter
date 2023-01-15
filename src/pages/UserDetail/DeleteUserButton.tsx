@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from "@mui/material"
 import {User} from "api/sdk"
-import {AuthContext} from "App"
+import {AuthContext} from "utils/context"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {AutoLoadingButton} from "../../components/AutoLoadingButton"

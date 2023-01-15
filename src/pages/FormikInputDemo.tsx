@@ -17,7 +17,7 @@ import {
 } from "@mui/material"
 import {DatePicker, DateTimePicker, TimePicker} from "@mui/x-date-pickers"
 import {User} from "api/sdk"
-import {AuthContext} from "App"
+import {AuthContext} from "utils/context"
 import FormSection from "components/FormSection"
 import PageHeader from "components/PageHeader"
 import dayjs from "dayjs"

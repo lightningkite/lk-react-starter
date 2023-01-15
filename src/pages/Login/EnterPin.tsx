@@ -1,6 +1,6 @@
 import {LoadingButton} from "@mui/lab"
 import {Alert, Button, TextField, Typography} from "@mui/material"
-import {UnauthContext} from "App"
+import {UnauthContext} from "utils/context"
 import React, {createRef, FC, useContext, useEffect, useState} from "react"
 
 export interface EnterPinProps {

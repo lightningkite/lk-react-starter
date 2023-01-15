@@ -8,7 +8,7 @@ import {
   Menu,
   MenuItem
 } from "@mui/material"
-import {AuthContext} from "App"
+import {AuthContext} from "utils/context"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
 

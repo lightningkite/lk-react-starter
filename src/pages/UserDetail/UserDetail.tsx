@@ -1,6 +1,6 @@
 import {Card, CardContent, Container} from "@mui/material"
 import {User} from "api/sdk"
-import {AuthContext} from "App"
+import {AuthContext} from "utils/context"
 import ErrorAlert from "components/ErrorAlert"
 import Loading from "components/Loading"
 import PageHeader from "components/PageHeader"

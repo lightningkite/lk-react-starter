@@ -5,8 +5,9 @@ export const theme = createTheme({
   // https://mui.com/material-ui/customization/typography/
   typography: {
     h1: {
-      fontSize: 26,
-      lineHeight: 1.2
+      fontSize: 30,
+      lineHeight: 1.2,
+      fontWeight: 700
     }
   },
 
