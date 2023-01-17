@@ -5,11 +5,11 @@ import {
 import {Add} from "@mui/icons-material"
 import {Button, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
-import {AuthContext} from "utils/context"
 import DialogForm from "components/DialogForm"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useState} from "react"
+import {AuthContext} from "utils/context"
 import {dateToISO} from "utils/helpers"
 import * as yup from "yup"
 
@@ -69,7 +69,7 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
         onClose={onClose}
         onSubmit={async () => {
           await formik.submitForm()
-          if (!formik.isValid || !formik.submitCount) {
+          if ((!formik.isValid || !formik.submitCount) && !formik.dirty) {
             throw new Error("Please fix the errors above.")
           }
         }}

@@ -53,7 +53,7 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
     setIsSubmitting(true)
 
     onSubmit()
-      .then(onClose)
+      .then(handleClose)
       .catch((e) => {
         console.error(e)
         setError(e?.message || "Error submitting")
@@ -79,7 +79,7 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
 
           <Tooltip title="Close">
             <IconButton
-              onClick={onClose}
+              onClick={handleClose}
               sx={{
                 position: "absolute",
                 right: 8,
