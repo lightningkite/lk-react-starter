@@ -5,7 +5,7 @@ import {
 import {Add} from "@mui/icons-material"
 import {Button, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
-import DialogForm from "components/DialogForm"
+import DialogForm, {shouldPreventSubmission} from "components/DialogForm"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
 import React, {FC, useContext, useState} from "react"
@@ -69,7 +69,7 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
         onClose={onClose}
         onSubmit={async () => {
           await formik.submitForm()
-          if ((!formik.isValid || !formik.submitCount) && !formik.dirty) {
+          if (shouldPreventSubmission(formik)) {
             throw new Error("Please fix the errors above.")
           }
         }}

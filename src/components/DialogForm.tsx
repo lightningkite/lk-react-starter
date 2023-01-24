@@ -13,6 +13,7 @@ import {
   IconButton,
   Tooltip
 } from "@mui/material"
+import { useFormik } from "formik"
 import React, {FC, useState} from "react"
 
 export interface DialogFormProps extends DialogProps {
@@ -121,3 +122,9 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
 }
 
 export default DialogForm
+
+export function shouldPreventSubmission(
+  formik: ReturnType<typeof useFormik<any>>
+): boolean {
+  return (!formik.submitCount && !formik.dirty) || !formik.isValid
+}
