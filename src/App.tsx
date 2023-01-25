@@ -1,4 +1,3 @@
-import {ThemeProvider} from "@mui/material"
 import {LocalizationProvider} from "@mui/x-date-pickers"
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs"
 import {User} from "api/sdk"
@@ -11,7 +10,6 @@ import React, {FC, useEffect, useState} from "react"
 import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
 import {AuthContext, UnauthContext} from "utils/context"
-import {theme} from "./theme"
 
 const App: FC = () => {
   const {api, changeBackendURL, session, authenticate, logout} =
@@ -43,25 +41,21 @@ const App: FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          {session && currentUser ? (
-            <AuthContext.Provider
-              value={{session, logout, currentUser, setCurrentUser}}
-            >
-              <MainLayout>
-                <AuthRoutes />
-              </MainLayout>
-            </AuthContext.Provider>
-          ) : (
-            <UnauthContext.Provider
-              value={{api, changeBackendURL, authenticate}}
-            >
-              <UnauthLayout>
-                <UnauthRoutes />
-              </UnauthLayout>
-            </UnauthContext.Provider>
-          )}
-        </ThemeProvider>
+        {session && currentUser ? (
+          <AuthContext.Provider
+            value={{session, logout, currentUser, setCurrentUser}}
+          >
+            <MainLayout>
+              <AuthRoutes />
+            </MainLayout>
+          </AuthContext.Provider>
+        ) : (
+          <UnauthContext.Provider value={{api, changeBackendURL, authenticate}}>
+            <UnauthLayout>
+              <UnauthRoutes />
+            </UnauthLayout>
+          </UnauthContext.Provider>
+        )}
       </BrowserRouter>
     </LocalizationProvider>
   )
