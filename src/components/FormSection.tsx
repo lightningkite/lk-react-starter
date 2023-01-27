@@ -14,7 +14,7 @@ export const FormSection: FC<PropsWithChildren<FormSectionProps>> = (props) => {
   return (
     <Box pt={disableTopPadding ? undefined : 6}>
       {title && (
-        <Typography variant="h6" fontWeight="bold" color="primary.main">
+        <Typography variant="h3" color="primary.main">
           {title}
         </Typography>
       )}

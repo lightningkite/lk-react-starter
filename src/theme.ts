@@ -7,6 +7,16 @@ export const theme = createTheme({
     h1: {
       fontSize: 30,
       lineHeight: 1.2,
+      fontWeight: 700,
+    },
+    h2: {
+      fontSize: 24,
+      lineHeight: 1.2,
+      fontWeight: 700
+    },
+    h3: {
+      fontSize: 20,
+      lineHeight: 1.6,
       fontWeight: 700
     }
   },

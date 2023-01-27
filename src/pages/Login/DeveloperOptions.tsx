@@ -30,7 +30,7 @@ const DeveloperOptions: FC = () => {
   return (
     <Box sx={{textAlign: "left"}}>
       <Divider sx={{my: 2}} />
-      <Typography variant="h6">Developer Settings</Typography>
+      <Typography variant="h3">Developer Settings</Typography>
       <Typography variant="subtitle2" lineHeight={1.2}>
         These options are only shown by default in local development. To show
         this in production, enter the secret code in the email field:{" "}
