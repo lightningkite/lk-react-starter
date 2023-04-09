@@ -1,5 +1,6 @@
 import {useState} from "react"
 import {LocalStorageKey} from "utils/constants"
+import {useQueryParams} from "utils/hooks/useQueryParams"
 import {MockApi} from "./mockApi"
 import {Api, LiveApi, UserSession} from "./sdk"
 
@@ -24,7 +25,6 @@ const envBackendURL = import.meta.env.VITE_BACKEND_HTTP_URL
 if (envBackendURL && !backendURLOptions.some((o) => o.url === envBackendURL)) {
   backendURLOptions.push({label: "Custom Env Default", url: envBackendURL})
 }
-
 export const useSessionManager = (): {
   api: Api
   changeBackendURL: (backendURL: string) => void
@@ -32,6 +32,8 @@ export const useSessionManager = (): {
   authenticate: (userToken: string) => void
   logout: () => void
 } => {
+  const {jwt: queryJWT} = useQueryParams()
+
   const [api, setApi] = useState<Api>(() => {
     const localStorageBackendURL = localStorage.getItem(
       LocalStorageKey.BACKEND_URL
@@ -50,25 +52,27 @@ export const useSessionManager = (): {
 
   // Null if not logged in, a session if logged in
   const [session, setSession] = useState<UserSession | null>(() => {
-    const token = localStorage.getItem(LocalStorageKey.USER_TOKEN)
+    const localStorageToken = localStorage.getItem(LocalStorageKey.USER_TOKEN)
+    if (!localStorageToken && queryJWT) {
+      localStorage.setItem(LocalStorageKey.USER_TOKEN, queryJWT)
+    }
+
+    const token = localStorageToken ?? queryJWT
 
     if (token) {
-      return new UserSession(api, token)
+      const newSession = new UserSession(api, token)
+      refreshJWT(newSession)
+      return newSession
     }
     return null
   })
 
-  const authenticate = (userToken: string) => {
+  function authenticate(userToken: string) {
     setSession(new UserSession(api, userToken))
     localStorage.setItem(LocalStorageKey.USER_TOKEN, userToken)
   }
 
-  const logout = (): void => {
-    localStorage.removeItem(LocalStorageKey.USER_TOKEN)
-    window.location.href = "/"
-  }
-
-  const changeBackendURL = (backendURL: string) => {
+  function changeBackendURL(backendURL: string) {
     localStorage.setItem(LocalStorageKey.BACKEND_URL, backendURL)
     if (backendURL === "mock") {
       setApi(new MockApi())
@@ -83,5 +87,25 @@ export const useSessionManager = (): {
     session,
     authenticate,
     logout
+  }
+}
+
+export function logout(): void {
+  localStorage.removeItem(LocalStorageKey.USER_TOKEN)
+  window.location.href = "/"
+}
+
+async function refreshJWT(session: UserSession) {
+  try {
+    if (!session) return
+
+    const newJWT = await session.auth.refreshToken()
+    localStorage.setItem(LocalStorageKey.USER_TOKEN, newJWT)
+
+    const url = new URL(window.location.href)
+    url.searchParams.delete("jwt")
+    window.history.replaceState({}, "", url.toString())
+  } catch {
+    logout()
   }
 }
