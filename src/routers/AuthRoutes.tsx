@@ -22,12 +22,32 @@ const AuthRoutes: FC = () => {
           <Route path="/users/:userId" element={<UserDetail />} />
           <Route path="/input-demo" element={<FormikInputDemo />} />
 
-          {/* If page doesn't exist, redirect to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="*"
+            element={<Navigate to={getUrlFromNextParam() ?? "/"} replace />}
+          />
         </Route>
       </Routes>
     </Suspense>
   )
+}
+
+/**
+ *
+ * @returns a URL where the path is from the next query parameter, preserve the other query parameters
+ */
+function getUrlFromNextParam(): string | null {
+  if (location.pathname !== "/login") return null
+
+  // Return a URL where the path is from the next query parameter, preserve the other query parameters
+  const url = new URL(location.href)
+  const nextPath = url.searchParams.get("next")
+  if (!nextPath) return null
+
+  url.pathname = nextPath
+  url.searchParams.delete("next")
+
+  return url.pathname + url.search
 }
 
 export default AuthRoutes
