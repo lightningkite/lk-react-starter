@@ -8,12 +8,13 @@ import {
   Menu,
   MenuItem
 } from "@mui/material"
-import {AuthContext} from "utils/context"
+import {logout} from "api/useSessionManager"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
+import {AuthContext} from "utils/context"
 
 const MyUserMenu: FC = () => {
-  const {currentUser, logout} = useContext(AuthContext)
+  const {currentUser} = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)

@@ -3,7 +3,6 @@ import {createContext} from "react"
 
 export interface AuthContextType {
   session: UserSession
-  logout: () => void
   currentUser: User
   setCurrentUser: (newCurrentUser: User) => void
 }

@@ -12,8 +12,7 @@ import {AuthRoutes, UnauthRoutes} from "routers"
 import {AuthContext, UnauthContext} from "utils/context"
 
 const App: FC = () => {
-  const {api, changeBackendURL, session, authenticate, logout} =
-    useSessionManager()
+  const {api, changeBackendURL, session, authenticate} = useSessionManager()
 
   const [currentUser, setCurrentUser] = useState<User | null>()
 
@@ -42,9 +41,7 @@ const App: FC = () => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         {session && currentUser ? (
-          <AuthContext.Provider
-            value={{session, logout, currentUser, setCurrentUser}}
-          >
+          <AuthContext.Provider value={{session, currentUser, setCurrentUser}}>
             <MainLayout>
               <AuthRoutes />
             </MainLayout>
