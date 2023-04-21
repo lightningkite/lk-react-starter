@@ -8,9 +8,9 @@ import {
   DialogTitle
 } from "@mui/material"
 import {User} from "api/sdk"
-import {AuthContext} from "utils/context"
 import React, {FC, useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
+import {AuthContext} from "utils/context"
 import {AutoLoadingButton} from "../../components/AutoLoadingButton"
 
 export const DeleteUserButton: FC<{user: User}> = ({user}) => {

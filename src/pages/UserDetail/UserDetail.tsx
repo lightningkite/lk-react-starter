@@ -1,11 +1,11 @@
 import {Card, CardContent, Container} from "@mui/material"
 import {User} from "api/sdk"
-import {AuthContext} from "utils/context"
 import ErrorAlert from "components/ErrorAlert"
 import Loading from "components/Loading"
 import PageHeader from "components/PageHeader"
 import React, {FC, useContext, useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
+import {AuthContext} from "utils/context"
 import {DeleteUserButton} from "./DeleteUserButton"
 import {UserForm} from "./UserForm"
 
