@@ -1,5 +1,6 @@
 import {Close} from "@mui/icons-material"
 import {LoadingButton} from "@mui/lab"
+import type {DialogProps} from "@mui/material"
 import {
   Alert,
   Box,
@@ -8,13 +9,13 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogProps,
   DialogTitle,
   IconButton,
   Tooltip
 } from "@mui/material"
-import {useFormik} from "formik"
-import React, {FC, useState} from "react"
+import type {useFormik} from "formik"
+import type {FC} from "react"
+import React, {useState} from "react"
 import {AutoLoadingButton} from "./AutoLoadingButton"
 
 export interface DialogFormProps extends DialogProps {
@@ -146,6 +147,7 @@ export const DialogForm: FC<DialogFormProps> = (props) => {
 export default DialogForm
 
 export function shouldPreventSubmission(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formik: ReturnType<typeof useFormik<any>>
 ): boolean {
   return (!formik.submitCount && !formik.dirty) || !formik.isValid

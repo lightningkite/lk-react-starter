@@ -1,3 +1,4 @@
+import {dateToISO} from "@lightningkite/react-lightning-helpers"
 import {
   randAvatar,
   randEmail,
@@ -6,8 +7,7 @@ import {
   randPhoneNumber,
   randUuid
 } from "@ngneat/falso"
-import {User} from "api/sdk"
-import {dateToISO} from "utils/helpers"
+import type {User} from "api/sdk"
 
 export function generateUsers(total: number): User[] {
   return Array.from({length: total}, () => ({

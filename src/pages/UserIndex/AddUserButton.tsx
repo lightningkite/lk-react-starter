@@ -1,16 +1,18 @@
 import {
-  makeFormikDateTimePickerProps,
+  makeFormikDatePickerProps,
   makeFormikTextFieldProps
 } from "@lightningkite/mui-lightning-components"
+import {dayjsToISO} from "@lightningkite/react-lightning-helpers"
 import {Add} from "@mui/icons-material"
 import {Button, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
 import DialogForm, {shouldPreventSubmission} from "components/DialogForm"
+import type {Dayjs} from "dayjs"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
-import React, {FC, useContext, useState} from "react"
+import type {FC} from "react"
+import React, {useContext, useState} from "react"
 import {AuthContext} from "utils/context"
-import {dateToISO} from "utils/helpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
@@ -40,16 +42,16 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
       name: "",
       email: "",
       phone: "",
-      birthday: null as Date | null
+      birthday: null as Dayjs | null
     },
     validationSchema,
     onSubmit: async (values) => {
       await session.user.insert({
         ...values,
         _id: crypto.randomUUID(),
-        birthday: dateToISO(values.birthday as Date),
-        createdAt: dateToISO(new Date()),
-        modifiedAt: dateToISO(new Date())
+        birthday: dayjsToISO(values.birthday!),
+        createdAt: dayjsToISO(dayjs()),
+        modifiedAt: dayjsToISO(dayjs())
       })
 
       props.afterSubmit()
@@ -89,7 +91,7 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
           />
           <DatePicker
             label="Birthday"
-            {...makeFormikDateTimePickerProps(formik, "birthday")}
+            {...makeFormikDatePickerProps(formik, "birthday")}
             minDate={dayjs().subtract(120, "year")}
             maxDate={dayjs()}
           />
