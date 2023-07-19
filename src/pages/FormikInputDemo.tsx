@@ -1,7 +1,9 @@
 import {
   makeFormikAutocompleteProps,
   makeFormikCheckboxProps,
+  makeFormikDatePickerProps,
   makeFormikDateTimePickerProps,
+  makeFormikTimePickerProps,
   makeFormikTextFieldProps,
   RestAutocompleteInput
 } from "@lightningkite/mui-lightning-components"
@@ -16,12 +18,13 @@ import {
   Typography
 } from "@mui/material"
 import {DatePicker, DateTimePicker, TimePicker} from "@mui/x-date-pickers"
-import {User} from "api/sdk"
+import type {User} from "api/sdk"
 import FormSection from "components/FormSection"
 import PageHeader from "components/PageHeader"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
-import React, {FC, useContext} from "react"
+import type {FC} from "react";
+import React, { useContext} from "react"
 import {AuthContext} from "utils/context"
 
 const FormikInputDemo: FC = () => {
@@ -34,9 +37,9 @@ const FormikInputDemo: FC = () => {
       text: "",
       number: 0,
       checkbox: false,
-      date: new Date(),
-      time: new Date(),
-      dateTime: new Date()
+      date: dayjs(),
+      time: dayjs(),
+      dateTime: dayjs()
     },
     // Validation schema is omitted from this demo. See src/pages/UserDetail/UserForm.tsx for an example.
     onSubmit: async (values) => {
@@ -114,13 +117,13 @@ const FormikInputDemo: FC = () => {
           >
             <DatePicker
               label="Pick a date"
-              {...makeFormikDateTimePickerProps(formik, "date")}
+              {...makeFormikDatePickerProps(formik, "date")}
               minDate={dayjs().subtract(5, "year")}
               maxDate={dayjs().add(1, "year")}
             />
             <TimePicker
               label="Pick a Time"
-              {...makeFormikDateTimePickerProps(formik, "time")}
+              {...makeFormikTimePickerProps(formik, "time")}
             />
             <DateTimePicker
               label="Pick a date and time"

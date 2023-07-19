@@ -1,17 +1,18 @@
 import {makeObjectModification} from "@lightningkite/lightning-server-simplified"
 import {
-  makeFormikDateTimePickerProps,
+  makeFormikDatePickerProps,
   makeFormikTextFieldProps
 } from "@lightningkite/mui-lightning-components"
+import { dayjsFromISO, dayjsToISO } from "@lightningkite/react-lightning-helpers"
 import {LoadingButton} from "@mui/lab"
 import {Alert, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
-import {User} from "api/sdk"
+import type {User} from "api/sdk"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
-import React, {FC, useContext, useEffect, useState} from "react"
+import type {FC} from "react";
+import React, { useContext, useEffect, useState} from "react"
 import {AuthContext} from "utils/context"
-import {dateFromISO, dateToISO} from "utils/helpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
@@ -45,7 +46,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       // Convert date fields from Date back to ISO string
       const formattedValues = {
         ...values,
-        birthday: dateToISO(values.birthday)
+        birthday: dayjsToISO(values.birthday)
       }
 
       // Automatically builds the Lightning Server modification given the old object and the new values
@@ -82,7 +83,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       <TextField label="Phone" {...makeFormikTextFieldProps(formik, "phone")} />
       <DatePicker
         label="Birthday"
-        {...makeFormikDateTimePickerProps(formik, "birthday")}
+        {...makeFormikDatePickerProps(formik, "birthday")}
         minDate={dayjs().subtract(120, "year")}
         maxDate={dayjs()}
       />
@@ -110,6 +111,6 @@ function userToFormikValues(user: User) {
     name: user.name,
     email: user.email,
     phone: user.phone,
-    birthday: dateFromISO(user.birthday)
+    birthday: dayjsFromISO(user.birthday)
   }
 }
