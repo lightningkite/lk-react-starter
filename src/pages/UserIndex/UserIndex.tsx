@@ -1,12 +1,12 @@
 import {RestDataTable} from "@lightningkite/mui-lightning-components"
 import {Container} from "@mui/material"
 import PageHeader from "components/PageHeader"
-import type {FC} from "react";
-import React, { useContext, useState} from "react"
+import type {FC} from "react"
+import React, {useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {AuthContext} from "utils/context"
 import {AddUserButton} from "./AddUserButton"
-import { dateFromISO } from "@lightningkite/react-lightning-helpers";
+import {dateFromISO} from "@lightningkite/react-lightning-helpers"
 
 export const UserIndex: FC = () => {
   const navigate = useNavigate()

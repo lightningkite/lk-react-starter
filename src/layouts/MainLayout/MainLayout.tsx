@@ -1,5 +1,5 @@
 import {Box, Button, Divider, Stack} from "@mui/material"
-import type {FC, ReactNode} from "react";
+import type {FC, ReactNode} from "react"
 import React from "react"
 import {NavLink} from "react-router-dom"
 import MyUserMenu from "./MyUserMenu"

@@ -23,8 +23,8 @@ import FormSection from "components/FormSection"
 import PageHeader from "components/PageHeader"
 import dayjs from "dayjs"
 import {useFormik} from "formik"
-import type {FC} from "react";
-import React, { useContext} from "react"
+import type {FC} from "react"
+import React, {useContext} from "react"
 import {AuthContext} from "utils/context"
 
 const FormikInputDemo: FC = () => {

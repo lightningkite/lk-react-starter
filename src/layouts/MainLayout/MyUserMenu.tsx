@@ -9,8 +9,8 @@ import {
   MenuItem
 } from "@mui/material"
 import {logout} from "api/useSessionManager"
-import type {FC} from "react";
-import React, { useContext, useState} from "react"
+import type {FC} from "react"
+import React, {useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {AuthContext} from "utils/context"
 

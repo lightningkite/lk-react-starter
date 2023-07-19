@@ -1,6 +1,6 @@
 import {LoadingButton} from "@mui/lab"
 import {Alert, Button, TextField, Typography} from "@mui/material"
-import type { FC} from "react";
+import type {FC} from "react"
 import React, {createRef, useContext, useEffect, useState} from "react"
 import {UnauthContext} from "utils/context"
 
