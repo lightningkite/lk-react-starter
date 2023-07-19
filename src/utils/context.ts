@@ -1,4 +1,4 @@
-import {Api, User, UserSession} from "api/sdk"
+import type {Api, User, UserSession} from "api/sdk"
 import {createContext} from "react"
 
 export interface AuthContextType {

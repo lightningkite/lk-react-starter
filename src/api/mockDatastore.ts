@@ -1,5 +1,5 @@
 import {generateUsers} from "./mocks/users"
-import {User} from "./sdk"
+import type {User} from "./sdk"
 
 export interface MockDatastore {
   users: User[]

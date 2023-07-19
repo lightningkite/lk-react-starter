@@ -1,8 +1,9 @@
 import {mockRestEndpointFunctions} from "@lightningkite/lightning-server-simplified"
 import {rand} from "@ngneat/falso"
 import {LocalStorageKey} from "utils/constants"
-import {generateMockDatastore, MockDatastore} from "./mockDatastore"
-import {Api, EmailPinLogin, ServerHealth, User} from "./sdk"
+import type { MockDatastore} from "./mockDatastore";
+import {generateMockDatastore} from "./mockDatastore"
+import type {Api, EmailPinLogin, ServerHealth, User} from "./sdk"
 
 let myUser: User | null = null
 
@@ -30,7 +31,7 @@ export class MockApi implements Api {
       console.log("refreshToken")
       return "mock-refresh-token"
     },
-    getSelf: (userToken: string): Promise<User> => {
+    getSelf: (_userToken: string): Promise<User> => {
       if (!myUser) return Promise.reject()
       console.log("getSelf", myUser)
       return Promise.resolve(myUser)
@@ -39,7 +40,7 @@ export class MockApi implements Api {
       console.log("anonymousToken")
       return "mock-anonymous-token"
     },
-    emailLoginLink: async (email: string): Promise<void> => {
+    emailLoginLink: async (_email: string): Promise<void> => {
       localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
       console.log("emailLoginLink")
       alert(
