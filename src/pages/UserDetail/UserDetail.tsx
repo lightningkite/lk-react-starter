@@ -12,12 +12,12 @@ import {UserForm} from "./UserForm"
 
 const UserDetail: FC = () => {
   const {userId} = useParams()
-  const {session} = useContext(AuthContext)
+  const {api} = useContext(AuthContext)
 
   const [user, setUser] = useState<User | null>()
 
   useEffect(() => {
-    session.user
+    api.user
       .detail(userId as string)
       .then(setUser)
       .catch(() => setUser(null))

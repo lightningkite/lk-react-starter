@@ -11,8 +11,6 @@ import {
   Stack,
   Typography
 } from "@mui/material"
-import type {MockApi} from "api/mockApi"
-import type {LiveApi} from "api/sdk"
 import type {FC} from "react"
 import React, {useContext} from "react"
 import {UnauthContext} from "utils/context"
@@ -42,10 +40,9 @@ if (envBackendURL && !backendURLOptions.some((o) => o.url === envBackendURL)) {
 export const DEVELOPER_SECRET_CODE = "info@lightningkite.com"
 
 const DeveloperOptions: FC = () => {
-  const {changeBackendURL, api} = useContext(UnauthContext)
+  const {backendUrl, changeBackendURL} = useContext(UnauthContext)
 
-  const selectedBackendURL = (api as LiveApi | MockApi).httpUrl
-  const isUsingCustomBackendURL = selectedBackendURL !== envBackendURL
+  const isUsingCustomBackendURL = backendUrl !== envBackendURL
 
   return (
     <Box sx={{textAlign: "left"}}>
@@ -68,7 +65,7 @@ const DeveloperOptions: FC = () => {
       <FormControl sx={{mt: 2}}>
         <FormLabel>Backend HTTP URL</FormLabel>
         <RadioGroup
-          value={selectedBackendURL}
+          value={backendUrl}
           onChange={(e) => changeBackendURL(e.target.value)}
           sx={{gap: 1, mt: 1}}
         >

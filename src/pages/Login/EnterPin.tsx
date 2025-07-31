@@ -6,10 +6,11 @@ import {UnauthContext} from "utils/context"
 
 export interface EnterPinProps {
   email: string
+  tempId: string
 }
 
 const EnterPin: FC<EnterPinProps> = (props) => {
-  const {email} = props
+  const {email, tempId} = props
 
   const {api, authenticate} = useContext(UnauthContext)
   const submitPinButton = createRef<HTMLButtonElement>()
@@ -28,13 +29,19 @@ const EnterPin: FC<EnterPinProps> = (props) => {
   const onSubmit = () => {
     setSubmitting(true)
     setError("")
-    api.auth
-      .emailPINLogin({
-        email,
-        pin
-      })
-      .then((token) => {
-        authenticate(token)
+    api.emailProof
+      .proveEmailOwnership({key: tempId, password: pin})
+      .then((proof) => {
+        api.userAuth
+          .logInV2({
+            expires: null,
+            label: "",
+            proofs: [proof],
+            scopes: []
+          })
+          .then((res) => {
+            authenticate(res.session!)
+          })
       })
       .catch(() => setError("Failed to sign-in using the pin"))
       .finally(() => setSubmitting(false))

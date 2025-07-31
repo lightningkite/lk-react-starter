@@ -3,7 +3,6 @@ import {
   makeFormikDatePickerProps,
   makeFormikTextFieldProps
 } from "@lightningkite/mui-lightning-components"
-import {dayjsFromISO, dayjsToISO} from "@lightningkite/react-lightning-helpers"
 import {LoadingButton} from "@mui/lab"
 import {Alert, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
@@ -13,15 +12,8 @@ import {useFormik} from "formik"
 import type {FC} from "react"
 import React, {useContext, useEffect, useState} from "react"
 import {AuthContext} from "utils/context"
+import {dayjsFromISO, dayjsToISO} from "utils/helpers"
 import * as yup from "yup"
-
-// Form validation schema. See: https://www.npmjs.com/package/yup#object
-const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email().required("Email is required"),
-  phone: yup.string().required("Phone is required"),
-  birthday: yup.string().required("Birthday is required")
-})
 
 export interface UserFormProps {
   user: User
@@ -31,14 +23,19 @@ export interface UserFormProps {
 export const UserForm: FC<UserFormProps> = (props) => {
   const {user, setUser} = props
 
-  const {session, currentUser, setCurrentUser} = useContext(AuthContext)
+  const {api, currentUser, setCurrentUser} = useContext(AuthContext)
 
   const [error, setError] = useState("")
 
   // Formik is a library for managing form state. See: https://formik.org/docs/overview
   const formik = useFormik({
     initialValues: userToFormikValues(user),
-    validationSchema,
+    validationSchema: yup.object().shape({
+      name: yup.string().required("Name is required"),
+      email: yup.string().email().required("Email is required"),
+      phone: yup.string().required("Phone is required"),
+      birthday: yup.string().required("Birthday is required")
+    }),
     // When the form is submitted, this function is called if the form values are valid
     onSubmit: async (values) => {
       setError("")
@@ -58,7 +55,7 @@ export const UserForm: FC<UserFormProps> = (props) => {
       }
 
       try {
-        const updatedUser = await session.user.modify(user._id, modification)
+        const updatedUser = await api.user.modify(user._id, modification)
         setUser(updatedUser)
 
         if (currentUser._id === user._id) {

@@ -26,7 +26,7 @@ const MyUserMenu: FC = () => {
     <>
       <ListItemButton onClick={(e) => setUserMenuAnchor(e.currentTarget)}>
         <ListItemAvatar>
-          <Avatar src={currentUser.profilePic} />
+          <Avatar src={currentUser.profilePic ?? ""} />
         </ListItemAvatar>
         <ListItemText
           primary={currentUser.name}

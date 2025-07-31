@@ -28,7 +28,7 @@ import React, {useContext} from "react"
 import {AuthContext} from "utils/context"
 
 const FormikInputDemo: FC = () => {
-  const {session} = useContext(AuthContext)
+  const {api} = useContext(AuthContext)
 
   const formik = useFormik({
     initialValues: {
@@ -63,11 +63,11 @@ const FormikInputDemo: FC = () => {
             title="Rest Autocomplete Input"
             subtitle="The RestAutocompleteInput component fetches options asynchronously from the server as the user types. Only 10 items at a time are fetched from the server."
           >
-            <RestAutocompleteInput
+            <RestAutocompleteInput<User, true>
               {...makeFormikAutocompleteProps(formik, "multipleUsers")}
               multiple
               label="Select multiple users"
-              restEndpoint={session.user}
+              restEndpoint={api.user}
               getOptionLabel={(user) => `${user.name}`}
               searchProperties={["name"]}
             />
@@ -75,7 +75,7 @@ const FormikInputDemo: FC = () => {
             <RestAutocompleteInput
               {...makeFormikAutocompleteProps(formik, "gmailUser")}
               label="User with gmail email"
-              restEndpoint={session.user}
+              restEndpoint={api.user}
               getOptionLabel={(user) => `${user.name} (${user.email})`}
               additionalQueryConditions={[
                 {

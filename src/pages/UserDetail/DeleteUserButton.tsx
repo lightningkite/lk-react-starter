@@ -15,7 +15,7 @@ import {AuthContext} from "utils/context"
 import {AutoLoadingButton} from "../../components/AutoLoadingButton"
 
 export const DeleteUserButton: FC<{user: User}> = ({user}) => {
-  const {session} = useContext(AuthContext)
+  const {api} = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [openDialog, setOpenDialog] = useState(false)
@@ -24,7 +24,7 @@ export const DeleteUserButton: FC<{user: User}> = ({user}) => {
   const handleClose = () => setOpenDialog(false)
 
   async function deleteUser() {
-    session.user
+    api.user
       .delete(user._id)
       .then(() => navigate("/users"))
       .catch(() => alert("Failed to delete user"))

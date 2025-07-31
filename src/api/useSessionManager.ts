@@ -1,39 +1,63 @@
-import {useEffect, useState} from "react"
-import {LocalStorageKey} from "utils/constants"
+import {useMemo} from "react"
 import {MockApi} from "./mockApi"
-import type {Api} from "./sdk"
-import {LiveApi, UserSession} from "./sdk"
+import {LiveApi} from "./sdk"
+import {
+  createBasicFetcher,
+  createBulkFetcher
+} from "@lightningkite/lightning-server-simplified"
+import {usePersistentState} from "@lightningkite/mui-lightning-components"
 
-interface UseSessionManagerReturn {
-  api: Api
-  changeBackendURL: (backendURL: string) => void
-  session: UserSession | null
-  authenticate: (userToken: string) => void
-}
-
-export const useSessionManager = (): UseSessionManagerReturn => {
-  const [api, setApi] = useState(getInitialApi)
-  const [session, setSession] = useState(getInitialSession(api))
-
-  // Refresh the user token on initial page load to keep it from expiring
-  useEffect(() => {
-    session?.auth.refreshToken().then(changeToken).catch(logout)
-  }, [])
-
-  // Update the backend URL in local storage when it changes
-  useEffect(() => {
-    const backendURL = "httpUrl" in api ? api.httpUrl : "mock"
-    localStorage.setItem(LocalStorageKey.BACKEND_URL, backendURL)
-  }, [api])
+export const useSessionManager = () => {
+  const [backendUrl, setBackendUrl] = usePersistentState<string>(
+    "backend-url",
+    import.meta.env.VITE_BACKEND_HTTP_URL || "mock"
+  )
+  const [sessionToken, setSessionToken] = usePersistentState<string>(
+    "session-token",
+    ""
+  )
 
   // Update the user token in local storage when it changes
-  useEffect(() => {
-    if (session) {
-      localStorage.setItem(LocalStorageKey.USER_TOKEN, session.userToken)
-    } else {
-      localStorage.removeItem(LocalStorageKey.USER_TOKEN)
+
+  const getAccessToken = useMemo(() => {
+    const api = new LiveApi(createBasicFetcher(backendUrl, () => ({})))
+
+    let lastPull = new Date()
+    let accessToken = ""
+
+    return async () => {
+      // refresh after 3 minutes
+      const timedOut =
+        new Date().getTime() - lastPull.getTime() > 1_000 * 60 * 3
+
+      if (!accessToken || timedOut) {
+        lastPull = new Date()
+        return api.userAuth.getTokenSimple(sessionToken).then((res) => {
+          accessToken = res
+          return res
+        })
+      }
+      return accessToken
     }
-  }, [session])
+  }, [backendUrl, sessionToken])
+
+  const api = useMemo(() => {
+    if (backendUrl === "mock") {
+      return new MockApi()
+    }
+
+    if (sessionToken) {
+      return new LiveApi(
+        createBulkFetcher({
+          serverUrl: backendUrl,
+          headerCalculator: async () => ({
+            Authorization: `Bearer ${await getAccessToken()}`
+          })
+        })
+      )
+    }
+    return new LiveApi(createBulkFetcher({serverUrl: backendUrl}))
+  }, [sessionToken, backendUrl])
 
   function changeToken(userToken: string) {
     const url = new URL(window.location.href)
@@ -42,49 +66,19 @@ export const useSessionManager = (): UseSessionManagerReturn => {
       url.searchParams.delete("jwt")
       window.history.replaceState({}, "", url.toString())
     }
-
-    setSession(new UserSession(api, userToken))
-  }
-
-  function changeBackendURL(backendURL: string) {
-    setApi(backendURL === "mock" ? new MockApi() : new LiveApi(backendURL))
+    setSessionToken(userToken)
   }
 
   return {
     api,
-    changeBackendURL,
-    session,
-    authenticate: changeToken
+    backendUrl,
+    changeBackendURL: setBackendUrl,
+    authenticate: changeToken,
+    isLoggedIn: !!sessionToken
   }
 }
 
-function getInitialApi(): LiveApi | MockApi {
-  const localStorageBackendURL = localStorage.getItem(
-    LocalStorageKey.BACKEND_URL
-  )
-
-  const initialBackendURL =
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    localStorageBackendURL || import.meta.env.VITE_BACKEND_HTTP_URL || "mock"
-
-  return initialBackendURL === "mock"
-    ? new MockApi()
-    : new LiveApi(initialBackendURL)
-}
-
-function getInitialSession(api: LiveApi | MockApi): UserSession | null {
-  const localStorageToken =
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    localStorage.getItem(LocalStorageKey.USER_TOKEN) || undefined
-
-  const url = new URL(window.location.href)
-  const searchParamsJwt = url.searchParams.get("jwt")
-
-  const tokenToUse = localStorageToken ?? searchParamsJwt
-  return tokenToUse ? new UserSession(api, tokenToUse) : null
-}
-
 export function logout(): void {
-  localStorage.removeItem(LocalStorageKey.USER_TOKEN)
+  localStorage.removeItem("session-token")
   window.location.reload()
 }

@@ -1,56 +1,158 @@
-import {mockRestEndpointFunctions} from "@lightningkite/lightning-server-simplified"
-import {rand} from "@ngneat/falso"
-import {LocalStorageKey} from "utils/constants"
 import type {MockDatastore} from "./mockDatastore"
 import {generateMockDatastore} from "./mockDatastore"
-import type {Api, EmailPinLogin, ServerHealth, User} from "./sdk"
+import type {
+  Api,
+  IdAndAuthMethods,
+  Proof,
+  ProofsCheckResult,
+  ServerHealth,
+  UUID
+} from "./sdk"
+import {mockRestEndpointFunctions} from "@lightningkite/lightning-server-simplified"
 
-let myUser: User | null = null
+// let myUser: User | null = null
 
 export class MockApi implements Api {
-  mockDatastore: MockDatastore = generateMockDatastore()
-
-  public constructor(
-    public httpUrl: string = "mock",
-    public socketUrl: string = httpUrl
-  ) {
-    myUser = rand(this.mockDatastore.users)
+  bulkRequest: Api["bulkRequest"] = () => {
+    throw new Error("Method not implemented.")
   }
-
-  readonly user = mockRestEndpointFunctions<User>(
-    this.mockDatastore.users,
-    "user"
-  )
-
   getServerHealth(): Promise<ServerHealth> {
-    return Promise.reject()
+    throw new Error("Method not implemented.")
   }
 
-  readonly auth = {
-    refreshToken: async (): Promise<string> => {
-      console.log("refreshToken")
-      return "mock-refresh-token"
+  readonly emailProof: Api["emailProof"] = {
+    beginEmailOwnershipProof: async (): Promise<string> => {
+      return ""
     },
-    getSelf: (_userToken: string): Promise<User> => {
-      if (!myUser) return Promise.reject()
-      console.log("getSelf", myUser)
-      return Promise.resolve(myUser)
+    proveEmailOwnership: async (): Promise<Proof> => {
+      return {
+        via: "email",
+        strength: 10,
+        property: "",
+        value: "",
+        at: new Date().toISOString(),
+        signature: ""
+      }
+    }
+  }
+
+  userFunctions = mockRestEndpointFunctions(mockDatastore.users, "users")
+
+  readonly user: Api["user"] = {
+    default: this.userFunctions.default,
+    query: this.userFunctions.query,
+    queryPartial: this.userFunctions.queryPartial,
+    detail: this.userFunctions.detail,
+    insertBulk: this.userFunctions.insertBulk,
+    insert: this.userFunctions.insert,
+    upsert: this.userFunctions.upsert,
+    bulkReplace: this.userFunctions.bulkReplace,
+    replace: this.userFunctions.replace,
+    bulkModify: this.userFunctions.bulkModify,
+    modifyWithDiff: this.userFunctions.modifyWithDiff,
+    bulkDelete: this.userFunctions.bulkDelete,
+    delete: this.userFunctions.delete,
+    count: this.userFunctions.count,
+    groupCount: this.userFunctions.groupCount,
+    aggregate: this.userFunctions.aggregate,
+    groupAggregate: this.userFunctions.groupAggregate,
+    modify: this.userFunctions.modify,
+    simplifiedModify: () => {
+      throw new Error("Function not implemented.")
     },
-    anonymousToken: async (): Promise<string> => {
-      console.log("anonymousToken")
-      return "mock-anonymous-token"
+    permissions: () => {
+      throw new Error("Function not implemented.")
     },
-    emailLoginLink: async (_email: string): Promise<void> => {
-      localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
-      console.log("emailLoginLink")
-      alert(
-        "You are using the mock API and will not receive an email. Refresh the page to log in."
-      )
+    groupCount2: () => {
+      throw new Error("Function not implemented.")
     },
-    emailPINLogin: async (input: EmailPinLogin): Promise<string> => {
-      localStorage.setItem(LocalStorageKey.USER_TOKEN, "mock-user-token")
-      console.log("emailPINLogin", {input})
-      return "mock-sso-uuid"
+    groupAggregate2: () => {
+      throw new Error("Function not implemented.")
+    }
+  }
+
+  readonly userAuth: Api["userAuth"] = {
+    logIn: function (input: Array<Proof>): Promise<IdAndAuthMethods<UUID>> {
+      throw new Error("Function not implemented.")
+    },
+    logInV2: async (input) => {
+      return {
+        id: "",
+        options: [],
+        strengthRequired: 10,
+        session: "mock-token"
+      }
+    },
+    checkProofs: function (
+      input: Array<Proof>
+    ): Promise<ProofsCheckResult<UUID>> {
+      throw new Error("Function not implemented.")
+    },
+    authenticationRequirements: async () => {
+      return {
+        options: [],
+        strengthRequired: 10
+      }
+    },
+    openSession: () => {
+      throw new Error("Function not implemented.")
+    },
+    createSubSession: () => {
+      throw new Error("Function not implemented.")
+    },
+    getToken: () => {
+      throw new Error("Function not implemented.")
+    },
+    getTokenSimple: async () => {
+      return "mock-token"
+    },
+    getSelf: () => {
+      throw new Error("Function not implemented.")
+    },
+    terminateSession: () => {
+      throw new Error("Function not implemented.")
+    },
+    terminateOtherSession: () => {
+      throw new Error("Function not implemented.")
+    }
+  }
+
+  userAuthFunctions = mockRestEndpointFunctions(
+    mockDatastore.userSession,
+    "user-auth"
+  )
+  readonly userSession: Api["userSession"] = {
+    default: this.userAuthFunctions.default,
+    query: this.userAuthFunctions.query,
+    queryPartial: this.userAuthFunctions.queryPartial,
+    detail: this.userAuthFunctions.detail,
+    insertBulk: this.userAuthFunctions.insertBulk,
+    insert: this.userAuthFunctions.insert,
+    upsert: this.userAuthFunctions.upsert,
+    bulkReplace: this.userAuthFunctions.bulkReplace,
+    replace: this.userAuthFunctions.replace,
+    bulkModify: this.userAuthFunctions.bulkModify,
+    modifyWithDiff: this.userAuthFunctions.modifyWithDiff,
+    bulkDelete: this.userAuthFunctions.bulkDelete,
+    delete: this.userAuthFunctions.delete,
+    count: this.userAuthFunctions.count,
+    groupCount: this.userAuthFunctions.groupCount,
+    aggregate: this.userAuthFunctions.aggregate,
+    groupAggregate: this.userAuthFunctions.groupAggregate,
+    modify: this.userAuthFunctions.modify,
+    simplifiedModify: () => {
+      throw new Error("Function not implemented.")
+    },
+    permissions: () => {
+      throw new Error("Function not implemented.")
+    },
+    groupCount2: () => {
+      throw new Error("Function not implemented.")
+    },
+    groupAggregate2: () => {
+      throw new Error("Function not implemented.")
     }
   }
 }
+
+const mockDatastore: MockDatastore = generateMockDatastore()

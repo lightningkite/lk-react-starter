@@ -13,21 +13,20 @@ import {AuthRoutes, UnauthRoutes} from "routers"
 import {AuthContext, UnauthContext} from "utils/context"
 
 const App: FC = () => {
-  const {api, changeBackendURL, session, authenticate} = useSessionManager()
+  const {api, backendUrl, changeBackendURL, authenticate, isLoggedIn} =
+    useSessionManager()
 
   const [currentUser, setCurrentUser] = useState<User | null>()
 
-  const isLoggedIn = !!session
-
   useEffect(() => {
-    if (!session) {
+    if (isLoggedIn) {
+      api.userAuth
+        .getSelf()
+        .then(setCurrentUser)
+        .catch(() => setCurrentUser(null))
+    } else {
       setCurrentUser(undefined)
     }
-
-    session?.auth
-      .getSelf()
-      .then(setCurrentUser)
-      .catch(() => setCurrentUser(null))
   }, [isLoggedIn])
 
   if (isLoggedIn && currentUser === undefined) {
@@ -41,14 +40,16 @@ const App: FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
-        {session && currentUser ? (
-          <AuthContext.Provider value={{session, currentUser, setCurrentUser}}>
+        {isLoggedIn && currentUser ? (
+          <AuthContext.Provider value={{api, currentUser, setCurrentUser}}>
             <MainLayout>
               <AuthRoutes />
             </MainLayout>
           </AuthContext.Provider>
         ) : (
-          <UnauthContext.Provider value={{api, changeBackendURL, authenticate}}>
+          <UnauthContext.Provider
+            value={{api, backendUrl, changeBackendURL, authenticate}}
+          >
             <UnauthLayout>
               <UnauthRoutes />
             </UnauthLayout>

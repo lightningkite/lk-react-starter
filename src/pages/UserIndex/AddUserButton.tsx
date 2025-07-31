@@ -2,7 +2,6 @@ import {
   makeFormikDatePickerProps,
   makeFormikTextFieldProps
 } from "@lightningkite/mui-lightning-components"
-import {dayjsToISO} from "@lightningkite/react-lightning-helpers"
 import {Add} from "@mui/icons-material"
 import {Button, Stack, TextField} from "@mui/material"
 import {DatePicker} from "@mui/x-date-pickers"
@@ -13,6 +12,7 @@ import {useFormik} from "formik"
 import type {FC} from "react"
 import React, {useContext, useState} from "react"
 import {AuthContext} from "utils/context"
+import {dayjsToISO} from "utils/helpers"
 import * as yup from "yup"
 
 // Form validation schema. See: https://www.npmjs.com/package/yup#object
@@ -28,7 +28,7 @@ export interface AddUserProps {
 }
 
 export const AddUserButton: FC<AddUserProps> = (props) => {
-  const {session} = useContext(AuthContext)
+  const {api} = useContext(AuthContext)
 
   const [showCreateForm, setShowCreateForm] = useState(false)
 
@@ -46,12 +46,13 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      await session.user.insert({
+      await api.user.insert({
         ...values,
         _id: crypto.randomUUID(),
         birthday: dayjsToISO(values.birthday!),
         createdAt: dayjsToISO(dayjs()),
-        modifiedAt: dayjsToISO(dayjs())
+        modifiedAt: dayjsToISO(dayjs()),
+        profilePic: ""
       })
 
       props.afterSubmit()

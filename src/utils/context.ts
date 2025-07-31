@@ -1,16 +1,17 @@
-import type {Api, User, UserSession} from "api/sdk"
+import type {User, Api} from "api/sdk"
 import {createContext} from "react"
 
 export interface AuthContextType {
-  session: UserSession
+  api: Api
   currentUser: User
   setCurrentUser: (newCurrentUser: User) => void
 }
 
 export interface UnauthContextType {
   api: Api
-  authenticate: (userToken: string) => void
+  backendUrl: string
   changeBackendURL: (backendURL: string) => void
+  authenticate: (userToken: string) => void
 }
 
 // AuthContext is available when the user is authenticated
