@@ -1,21 +1,36 @@
+import Loading from "components/Loading"
+import UnauthLayout from "layouts/UnauthLayout"
 import {Login} from "pages/Login"
-import type {FC} from "react"
-import React from "react"
-import {Navigate, Route, Routes} from "react-router-dom"
+import {Suspense, type FC} from "react"
+
+import {createBrowserRouter, Navigate, RouterProvider} from "react-router-dom"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: UnauthLayout,
+    children: [
+      {
+        path: "/login",
+        Component: Login
+      },
+      {
+        index: true,
+        element: <Navigate to={getLoginRedirectURL() ?? "/login"} replace />
+      },
+      {
+        path: "*",
+        element: <Navigate to={getLoginRedirectURL() ?? "/login"} replace />
+      }
+    ]
+  }
+])
 
 const UnauthRoutes: FC = () => {
   return (
-    <Routes>
-      <Route>
-        <Route path="/login" element={<Login />} />
-        {/* Add another route here if you want a sign-up screen, or any other unauthenticated routes */}
-
-        <Route
-          path="*"
-          element={<Navigate to={getLoginRedirectURL()} replace />}
-        />
-      </Route>
-    </Routes>
+    <Suspense fallback={<Loading />}>
+      <RouterProvider router={router} />
+    </Suspense>
   )
 }
 

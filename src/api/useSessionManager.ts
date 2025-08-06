@@ -43,7 +43,7 @@ export const useSessionManager = () => {
 
   const api = useMemo(() => {
     if (backendUrl === "mock") {
-      return new MockApi()
+      return new MockApi(!!sessionToken)
     }
 
     if (sessionToken) {
@@ -52,7 +52,14 @@ export const useSessionManager = () => {
           serverUrl: backendUrl,
           headerCalculator: async () => ({
             Authorization: `Bearer ${await getAccessToken()}`
-          })
+          }),
+          responseInterceptors: (response) => {
+            console.log(response)
+            if (!response.status.toString().includes("2")) {
+              logout()
+            }
+            return response
+          }
         })
       )
     }

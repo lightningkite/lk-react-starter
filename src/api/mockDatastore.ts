@@ -4,10 +4,11 @@ import {
   randEmail,
   randPhoneNumber,
   randPastDate,
-  randAvatar
+  randAvatar,
+  rand
 } from "@ngneat/falso"
 import {dateToISO} from "utils/helpers"
-import type {Session, User, UUID} from "./sdk"
+import {Animal, type Session, type User, type UUID} from "./sdk"
 
 export interface MockDatastore {
   users: User[]
@@ -24,6 +25,8 @@ export const generateMockDatastore = (): MockDatastore => {
       birthday: dateToISO(randPastDate({years: 100})),
       profilePic: randAvatar(),
       createdAt: dateToISO(randPastDate()),
+      favoriteAnimal: rand(Object.values(Animal)),
+      gender: rand(["m", "f"]),
       modifiedAt: dateToISO(randPastDate())
     })),
     userSession: []

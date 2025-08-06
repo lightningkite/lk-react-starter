@@ -1,6 +1,6 @@
 import {CssBaseline, ThemeProvider} from "@mui/material"
 import App from "App"
-import React from "react"
+
 import {createRoot} from "react-dom/client"
 import "styles/index.css"
 
@@ -10,6 +10,7 @@ import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
 import {theme} from "theme"
+import React from "react"
 
 const consoleFormat = "color:red; font-size: 20px"
 
@@ -26,6 +27,6 @@ root.render(
     <CssBaseline />
     <ThemeProvider theme={theme}>
       <App />
-    </ThemeProvider>
+    </ThemeProvider>p
   </React.StrictMode>
 )

@@ -48,6 +48,7 @@
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
     "import/no-named-as-default": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "react/react-in-jsx-scope": "off"
   }
 }

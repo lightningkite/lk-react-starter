@@ -4,15 +4,11 @@ import type {User} from "api/sdk"
 import {useSessionManager} from "api/useSessionManager"
 import ErrorAlert from "components/ErrorAlert"
 import Loading from "components/Loading"
-import MainLayout from "layouts/MainLayout"
-import UnauthLayout from "layouts/UnauthLayout"
-import type {FC} from "react"
 import React, {useEffect, useState} from "react"
-import {BrowserRouter} from "react-router-dom"
 import {AuthRoutes, UnauthRoutes} from "routers"
 import {AuthContext, UnauthContext} from "utils/context"
 
-const App: FC = () => {
+const App = () => {
   const {api, backendUrl, changeBackendURL, authenticate, isLoggedIn} =
     useSessionManager()
 
@@ -39,23 +35,17 @@ const App: FC = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <BrowserRouter>
-        {isLoggedIn && currentUser ? (
-          <AuthContext.Provider value={{api, currentUser, setCurrentUser}}>
-            <MainLayout>
-              <AuthRoutes />
-            </MainLayout>
-          </AuthContext.Provider>
-        ) : (
-          <UnauthContext.Provider
-            value={{api, backendUrl, changeBackendURL, authenticate}}
-          >
-            <UnauthLayout>
-              <UnauthRoutes />
-            </UnauthLayout>
-          </UnauthContext.Provider>
-        )}
-      </BrowserRouter>
+      {isLoggedIn && currentUser ? (
+        <AuthContext.Provider value={{api, currentUser, setCurrentUser}}>
+          <AuthRoutes />
+        </AuthContext.Provider>
+      ) : (
+        <UnauthContext.Provider
+          value={{api, backendUrl, changeBackendURL, authenticate}}
+        >
+          <UnauthRoutes />
+        </UnauthContext.Provider>
+      )}
     </LocalizationProvider>
   )
 }

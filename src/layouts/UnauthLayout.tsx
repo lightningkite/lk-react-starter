@@ -1,8 +1,7 @@
 import {Card, CardContent, Container, Stack} from "@mui/material"
-import type {FC, ReactNode} from "react"
-import React from "react"
+import {Outlet} from "react-router-dom"
 
-const UnauthLayout: FC<{children: ReactNode}> = ({children}) => {
+const UnauthLayout = () => {
   return (
     <Stack
       alignItems="center"
@@ -15,7 +14,7 @@ const UnauthLayout: FC<{children: ReactNode}> = ({children}) => {
       <Container maxWidth="xs">
         <Card>
           <CardContent sx={{maxHeight: "80vh", overflowY: "auto"}}>
-            {children}
+            <Outlet />
           </CardContent>
         </Card>
       </Container>

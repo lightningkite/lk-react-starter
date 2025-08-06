@@ -1,7 +1,8 @@
 import Loading from "components/Loading"
+import MainLayout from "layouts/MainLayout"
 import type {FC} from "react"
 import React, {Suspense} from "react"
-import {Navigate, Route, Routes} from "react-router-dom"
+import {Navigate, RouterProvider, createBrowserRouter} from "react-router-dom"
 
 // Code Splitting: This downloads the code for each page the first time the user
 // navigates to it. This is highly recommended for large apps since it reduces
@@ -11,24 +12,43 @@ const UserIndex = React.lazy(() => import("pages/UserIndex"))
 const UserDetail = React.lazy(() => import("pages/UserDetail"))
 const FormikInputDemo = React.lazy(() => import("pages/FormikInputDemo"))
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: MainLayout,
+    children: [
+      {
+        path: "/home",
+        element: <Home />
+      },
+      {
+        path: "/users",
+        element: <UserIndex />
+      },
+      {
+        path: "/users/:userId",
+        element: <UserDetail />
+      },
+      {
+        path: "/input-demo",
+        element: <FormikInputDemo />
+      },
+      {
+        index: true,
+        element: <Navigate to={getUrlFromNextParam() ?? "/home"} replace />
+      },
+      {
+        path: "*",
+        element: <Navigate to={getUrlFromNextParam() ?? "/home"} replace />
+      }
+    ]
+  }
+])
+
 const AuthRoutes: FC = () => {
   return (
-    // The Suspense component is used to show a loading indicator while the
-    // code for the page is being downloaded. (see above)
     <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route>
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<UserIndex />} />
-          <Route path="/users/:userId" element={<UserDetail />} />
-          <Route path="/input-demo" element={<FormikInputDemo />} />
-
-          <Route
-            path="*"
-            element={<Navigate to={getUrlFromNextParam() ?? "/"} replace />}
-          />
-        </Route>
-      </Routes>
+      <RouterProvider router={router} />
     </Suspense>
   )
 }

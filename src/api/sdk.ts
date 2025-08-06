@@ -187,6 +187,13 @@ export interface UpdateRestrictionsPart<T> {
     limitedTo: Condition<T>
 }
 
+export enum Animal {
+    Dog = "Dog",
+    Cat = "Cat",
+    Hamster = "Hamster",
+    Other = "Other",
+}
+
 export interface User {
     _id: UUID
     name: string
@@ -194,6 +201,8 @@ export interface User {
     phone: string | null | undefined
     birthday: LocalDate
     profilePic: string | null | undefined
+    favoriteAnimal: Animal | null | undefined
+    gender: "m" | "f"
     createdAt: string
     modifiedAt: string
 }

@@ -52,6 +52,8 @@ export const AddUserButton: FC<AddUserProps> = (props) => {
         birthday: dayjsToISO(values.birthday!),
         createdAt: dayjsToISO(dayjs()),
         modifiedAt: dayjsToISO(dayjs()),
+        favoriteAnimal: undefined,
+        gender: "f",
         profilePic: ""
       })
 

@@ -1,6 +1,6 @@
 import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material"
-import type {FC, PropsWithChildren} from "react"
-import React from "react"
+import type {PropsWithChildren} from "react"
+
 import {Link as RouterLink} from "react-router-dom"
 
 export type BreadCrumb = [label: string, path: string]
@@ -10,7 +10,7 @@ export interface PageHeaderProps {
   breadcrumbs?: BreadCrumb[]
 }
 
-const PageHeader: FC<PropsWithChildren<PageHeaderProps>> = (props) => {
+const PageHeader = (props: PropsWithChildren<PageHeaderProps>) => {
   const {title, breadcrumbs, children} = props
 
   return (
