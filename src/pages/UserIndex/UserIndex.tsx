@@ -1,4 +1,4 @@
-import {Container} from "@mui/material"
+import {Container, ListItemIcon, ListItemText, MenuItem} from "@mui/material"
 import PageHeader from "components/PageHeader"
 import type {FC} from "react"
 import {useContext, useMemo, useState} from "react"
@@ -8,18 +8,18 @@ import {AddUserButton} from "./AddUserButton"
 import type {Condition} from "@lightningkite/lightning-server-simplified"
 import {Animal, type User} from "api/sdk"
 import {
-  createFilter,
-  createMultiSelectFilterChip,
-  createSingleSelectFilterChip,
-  createAsyncMultiSelectFilterChip,
   getOptionsFromQuery,
   FilterBar,
   RestDataTable,
   getRowsFromEndpoint,
   FilterType,
   FilterTypeValue,
-  usePersistentState
+  createBasicFilter,
+  usePersistentState,
+  buildFilterChip,
+  createFilter
 } from "@lightningkite/mui-lightning-components"
+import {Person} from "@mui/icons-material"
 
 export const UserIndex: FC = () => {
   const navigate = useNavigate()
@@ -31,23 +31,25 @@ export const UserIndex: FC = () => {
 
   const filterState = useFilterLocalStorage(
     {
-      animal: createFilter({
+      animal: createBasicFilter({
         menuLabel: "Favorite Animal",
-        availability: "available",
+        menuItem: {
+          availability: "available"
+        },
         processor: (v: Animal[]): Condition<User> =>
           v.length > 0 ? {favoriteAnimal: {Inside: v}} : {Always: true},
-        FilterChip: createMultiSelectFilterChip({
+        FilterChip: buildFilterChip.multiSelect({
           getOptionLabel: (a) => a,
           options: Object.values(Animal),
           optionToId: (a) => a
         })
       }),
-      gender: createFilter({
+      gender: createBasicFilter({
         menuLabel: "Gender",
         processor: (g: User["gender"][]) => {
           return g.length > 0 ? {gender: {Inside: g}} : {Always: true}
         },
-        FilterChip: createSingleSelectFilterChip({
+        FilterChip: buildFilterChip.singleSelect({
           getOptionLabel: (g) => ({m: "Male", f: "Female"})[g],
           options: ["m", "f"] as const,
           optionToId: (g) => g
@@ -59,7 +61,7 @@ export const UserIndex: FC = () => {
           if (names.length > 0) return {name: {Inside: names}}
           else return {Always: true}
         },
-        FilterChip: createAsyncMultiSelectFilterChip({
+        FilterChip: buildFilterChip.asyncMultiSelect({
           getOptionLabel: (user: string) => user,
           itemGetter: getOptionsFromQuery({
             getOptions: api.user.query,
@@ -67,10 +69,20 @@ export const UserIndex: FC = () => {
             then: async (users: User[]) => users.map((user) => user.name)
           }),
           optionToId: (name) => name
-        })
+        }),
+        MenuItem: function Component(props) {
+          return (
+            <MenuItem {...props.menuProps}>
+              <ListItemIcon>
+                <Person fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Name</ListItemText>
+            </MenuItem>
+          )
+        }
       })
     },
-    {animal: [Animal.Cat], gender: ["m"], name: []}
+    {animal: [Animal.Cat], gender: ["m"], name: null}
   )
 
   return (
