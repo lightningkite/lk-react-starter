@@ -5,7 +5,8 @@ import {
   makeFormikDateTimePickerProps,
   makeFormikTimePickerProps,
   makeFormikTextFieldProps,
-  RestAutocompleteInput
+  RestAutocompleteInput,
+  getOptionsFromQuery
 } from "@lightningkite/mui-lightning-components"
 import {
   Button,
@@ -41,7 +42,6 @@ const FormikInputDemo: FC = () => {
       time: dayjs(),
       dateTime: dayjs()
     },
-    // Validation schema is omitted from this demo. See src/pages/UserDetail/UserForm.tsx for an example.
     onSubmit: async (values) => {
       console.log(values)
     }
@@ -67,24 +67,28 @@ const FormikInputDemo: FC = () => {
               {...makeFormikAutocompleteProps(formik, "multipleUsers")}
               multiple
               label="Select multiple users"
-              restEndpoint={api.user}
+              itemGetter={getOptionsFromQuery({
+                getOptions: api.user.query,
+                searchFields: ["name", "email"]
+              })}
               getOptionLabel={(user) => `${user.name}`}
-              searchProperties={["name"]}
+              getOptionId={(user) => user._id}
             />
 
             <RestAutocompleteInput
               {...makeFormikAutocompleteProps(formik, "gmailUser")}
               label="User with gmail email"
-              restEndpoint={api.user}
-              getOptionLabel={(user) => `${user.name} (${user.email})`}
-              additionalQueryConditions={[
-                {
+              itemGetter={getOptionsFromQuery({
+                getOptions: api.user.query,
+                searchFields: ["name", "email"],
+                condition: {
                   email: {
                     StringContains: {value: "@gmail.com", ignoreCase: true}
                   }
                 }
-              ]}
-              searchProperties={["name", "email"]}
+              })}
+              getOptionId={(user) => user._id}
+              getOptionLabel={(user) => `${user.name} (${user.email})`}
             />
           </FormSection>
 

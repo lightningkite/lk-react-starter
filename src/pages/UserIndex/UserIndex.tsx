@@ -1,14 +1,3 @@
-import {
-  createFilter,
-  createMultiSelectFilterChip,
-  createSingleSelectFilterChip,
-  FilterBar,
-  FilterType,
-  FilterTypeValue,
-  getRowsFromEndpoint,
-  RestDataTable,
-  usePersistentState
-} from "@lightningkite/mui-lightning-components"
 import {Container} from "@mui/material"
 import PageHeader from "components/PageHeader"
 import type {FC} from "react"
@@ -18,6 +7,19 @@ import {AuthContext} from "utils/context"
 import {AddUserButton} from "./AddUserButton"
 import type {Condition} from "@lightningkite/lightning-server-simplified"
 import {Animal, type User} from "api/sdk"
+import {
+  createFilter,
+  createMultiSelectFilterChip,
+  createSingleSelectFilterChip,
+  createAsyncMultiSelectFilterChip,
+  getOptionsFromQuery,
+  FilterBar,
+  RestDataTable,
+  getRowsFromEndpoint,
+  FilterType,
+  FilterTypeValue,
+  usePersistentState
+} from "@lightningkite/mui-lightning-components"
 
 export const UserIndex: FC = () => {
   const navigate = useNavigate()
@@ -35,7 +37,7 @@ export const UserIndex: FC = () => {
         processor: (v: Animal[]): Condition<User> =>
           v.length > 0 ? {favoriteAnimal: {Inside: v}} : {Always: true},
         FilterChip: createMultiSelectFilterChip({
-          displayValue: (a) => a,
+          getOptionLabel: (a) => a,
           options: Object.values(Animal),
           optionToId: (a) => a
         })
@@ -46,13 +48,29 @@ export const UserIndex: FC = () => {
           return g.length > 0 ? {gender: {Inside: g}} : {Always: true}
         },
         FilterChip: createSingleSelectFilterChip({
-          displayValue: (g) => ({m: "Male", f: "Female"})[g],
+          getOptionLabel: (g) => ({m: "Male", f: "Female"})[g],
           options: ["m", "f"] as const,
           optionToId: (g) => g
         })
+      }),
+      name: createFilter({
+        menuLabel: "Name",
+        processor: (names: string[]) => {
+          if (names.length > 0) return {name: {Inside: names}}
+          else return {Always: true}
+        },
+        FilterChip: createAsyncMultiSelectFilterChip({
+          getOptionLabel: (user: string) => user,
+          itemGetter: getOptionsFromQuery({
+            getOptions: api.user.query,
+            searchFields: ["name"],
+            then: async (users: User[]) => users.map((user) => user.name)
+          }),
+          optionToId: (name) => name
+        })
       })
     },
-    {animal: [Animal.Cat], gender: ["m"]}
+    {animal: [Animal.Cat], gender: ["m"], name: []}
   )
 
   return (
