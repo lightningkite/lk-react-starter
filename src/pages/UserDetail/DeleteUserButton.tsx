@@ -1,11 +1,11 @@
-import {HoverHelp} from "@lightningkite/mui-lightning-components"
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Tooltip
 } from "@mui/material"
 import type {User} from "api/sdk"
 import type {FC} from "react"
@@ -32,11 +32,11 @@ export const DeleteUserButton: FC<{user: User}> = ({user}) => {
 
   return (
     <>
-      <HoverHelp description={`Delete ${user.name}`}>
+      <Tooltip title={`Delete ${user.name}`}>
         <Button onClick={handleOpen} color="error">
           Delete
         </Button>
-      </HoverHelp>
+      </Tooltip>
 
       <Dialog
         open={openDialog}

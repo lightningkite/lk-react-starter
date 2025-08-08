@@ -12,10 +12,13 @@ import {
   FilterBar,
   RestDataTable,
   getRowsFromEndpoint,
-  createBasicFilter,
-  buildFilterChip,
-  createFilter,
-  useFilterBarSaveLocally
+  validateFilterType,
+  useFilterBarSaveLocally,
+  SingleSelectFilterChip,
+  MultiSelectFilterChip,
+  AsyncMultiSelectFilterChip,
+  MenuItemBasicDisplay,
+  setConditionProduct
 } from "@lightningkite/mui-lightning-components"
 import {Person} from "@mui/icons-material"
 
@@ -25,38 +28,40 @@ export const UserIndex: FC = () => {
 
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
-  const [filter, setFilter] = useState<Condition<User>[]>([])
+  const [filter, setFilter] = useState<Condition<User>>({Always: true})
 
   const filterState = useFilterBarSaveLocally(
     {
-      animal: createBasicFilter({
+      animal: validateFilterType({
         menuLabel: "Favorite Animal",
         processor: (v: Animal[]): Condition<User> =>
           v.length > 0 ? {favoriteAnimal: {Inside: v}} : {Always: true},
-        FilterChip: buildFilterChip.multiSelect({
+        FilterChip: MultiSelectFilterChip({
           getOptionLabel: (a) => a,
           options: Object.values(Animal),
           optionToId: (a) => a
-        })
+        }),
+        MenuItem: MenuItemBasicDisplay()
       }),
-      gender: createBasicFilter({
+      gender: validateFilterType({
         menuLabel: "Gender",
         processor: (g: User["gender"][]) => {
           return g.length > 0 ? {gender: {Inside: g}} : {Always: true}
         },
-        FilterChip: buildFilterChip.singleSelect({
+        FilterChip: SingleSelectFilterChip({
           getOptionLabel: (g) => ({m: "Male", f: "Female"})[g],
           options: ["m", "f"] as const,
           optionToId: (g) => g
-        })
+        }),
+        MenuItem: MenuItemBasicDisplay()
       }),
-      name: createFilter({
+      name: validateFilterType({
         menuLabel: "Name",
         processor: (names: string[]) => {
           if (names.length > 0) return {name: {Inside: names}}
           else return {Always: true}
         },
-        FilterChip: buildFilterChip.asyncMultiSelect({
+        FilterChip: AsyncMultiSelectFilterChip({
           getOptionLabel: (user: string) => user,
           itemGetter: getOptionsFromQuery({
             getOptions: api.user.query,
@@ -88,12 +93,12 @@ export const UserIndex: FC = () => {
         />
       </PageHeader>
 
-      <FilterBar {...filterState} setProducts={setFilter} />
+      <FilterBar {...filterState} setProduct={setConditionProduct(setFilter)} />
 
       <RestDataTable
         getRows={getRowsFromEndpoint<User>({
           endpoint: api.user,
-          condition: {And: filter}
+          condition: filter
         })}
         onRowClick={(user) => navigate(`/users/${user._id}`)}
         searchFields={["name", "email"]}
