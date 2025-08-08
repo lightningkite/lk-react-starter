@@ -1,7 +1,7 @@
 import {Container, ListItemIcon, ListItemText, MenuItem} from "@mui/material"
 import PageHeader from "components/PageHeader"
 import type {FC} from "react"
-import {useContext, useMemo, useState} from "react"
+import {useContext, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {AuthContext} from "utils/context"
 import {AddUserButton} from "./AddUserButton"
@@ -12,12 +12,10 @@ import {
   FilterBar,
   RestDataTable,
   getRowsFromEndpoint,
-  FilterType,
-  FilterTypeValue,
   createBasicFilter,
-  usePersistentState,
   buildFilterChip,
-  createFilter
+  createFilter,
+  useFilterBarSaveLocally
 } from "@lightningkite/mui-lightning-components"
 import {Person} from "@mui/icons-material"
 
@@ -29,13 +27,10 @@ export const UserIndex: FC = () => {
 
   const [filter, setFilter] = useState<Condition<User>[]>([])
 
-  const filterState = useFilterLocalStorage(
+  const filterState = useFilterBarSaveLocally(
     {
       animal: createBasicFilter({
         menuLabel: "Favorite Animal",
-        menuItem: {
-          availability: "available"
-        },
         processor: (v: Animal[]): Condition<User> =>
           v.length > 0 ? {favoriteAnimal: {Inside: v}} : {Always: true},
         FilterChip: buildFilterChip.multiSelect({
@@ -93,7 +88,7 @@ export const UserIndex: FC = () => {
         />
       </PageHeader>
 
-      <FilterBar setProducts={setFilter} {...filterState} />
+      <FilterBar {...filterState} setProducts={setFilter} />
 
       <RestDataTable
         getRows={getRowsFromEndpoint<User>({
@@ -110,26 +105,4 @@ export const UserIndex: FC = () => {
       />
     </Container>
   )
-}
-
-const useFilterLocalStorage = <T extends Record<string, FilterType>>(
-  filters: T,
-  initState?: {
-    [K in keyof T]: FilterTypeValue<T[K]> | null
-  }
-) => {
-  const f = useMemo(() => filters, [])
-
-  const [filterState, setFilterState] = usePersistentState<{
-    [K in keyof T]: FilterTypeValue<T[K]> | null
-  }>(
-    JSON.stringify(filters),
-    initState ??
-      Object.keys(filters).reduce((acc, key) => {
-        ;(acc as any)[key] = null
-        return acc
-      }, {} as any)
-  )
-
-  return {filterTypes: f, filterState, setFilterState}
 }
